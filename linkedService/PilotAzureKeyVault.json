@@ -1,0 +1,10 @@
+{
+	"name": "PilotAzureKeyVault",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://PilotKeyVault.vault.azure.net/"
+		}
+	}
+}

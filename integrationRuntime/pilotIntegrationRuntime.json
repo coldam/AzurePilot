@@ -1,0 +1,6 @@
+{
+	"name": "pilotIntegrationRuntime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

@@ -14,7 +14,12 @@
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation"
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "/@{dataset().TableName}",
+					"type": "Expression"
+				},
+				"container": "staginglz"
 			},
 			"compressionCodec": "snappy"
 		},

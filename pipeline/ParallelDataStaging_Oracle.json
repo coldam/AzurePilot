@@ -108,11 +108,12 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "SqlServerSource",
-									"sqlReaderQuery": {
-										"value": "@item().srcQuery",
+									"type": "OracleSource",
+									"oracleReaderQuery": {
+										"value": "@{item().srcQuery}",
 										"type": "Expression"
-									}
+									},
+									"partitionOption": "None"
 								},
 								"sink": {
 									"type": "ParquetSink",
@@ -124,7 +125,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "PlaceholderSourceTable",
+									"referenceName": "ParallelDataStagingOracle",
 									"type": "DatasetReference"
 								}
 							],

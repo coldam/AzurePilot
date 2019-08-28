@@ -1,0 +1,16 @@
+{
+	"name": "ParallelDataStagingOracle",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotOracleSource",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "OracleTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "test",
+			"table": "test"
+		}
+	}
+}

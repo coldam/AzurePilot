@@ -1,0 +1,27 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "StagingData",
+						"type": "DatasetReference"
+					},
+					"name": "clinicalevent"
+				},
+				{
+					"dataset": {
+						"referenceName": "StagingData",
+						"type": "DatasetReference"
+					},
+					"name": "person"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"script": "\n\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['V500_CLINICAL_EVENT']) ~> clinicalevent\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['raw_mill_person']) ~> person"
+		}
+	}
+}

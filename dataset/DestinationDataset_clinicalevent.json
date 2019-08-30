@@ -1,5 +1,5 @@
 {
-	"name": "DestinationDataset_twg",
+	"name": "DestinationDataset_clinicalevent",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "PilotBlobStorage",

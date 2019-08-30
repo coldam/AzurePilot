@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy_x7u",
+				"name": "Copy_charge_event",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -52,7 +52,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DestinationDataset_x7u",
+						"referenceName": "Destination_parquet_charge_event",
 						"type": "DatasetReference"
 					}
 				]

@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy_twg",
+				"name": "Copy_clinicalevent",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -29,8 +29,8 @@
 						"partitionOption": "DynamicRange",
 						"partitionSettings": {
 							"partitionColumnName": "CLINICAL_EVENT_ID",
-							"partitionUpperBound": "5174860070",
-							"partitionLowerBound": "5000000000"
+							"partitionUpperBound": "4999999999",
+							"partitionLowerBound": "4900000000"
 						}
 					},
 					"sink": {

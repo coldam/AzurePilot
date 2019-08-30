@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "onemillionrecords",
 				"folderPath": "V500_CLINICAL_EVENT",
 				"container": "staginglz"
 			},

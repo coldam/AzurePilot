@@ -1,5 +1,5 @@
 {
-	"name": "SourceDataset_x7u",
+	"name": "Source_ODBC_Charge_Event",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "PocOdbcProd2",
@@ -9,7 +9,7 @@
 		"type": "OdbcTable",
 		"schema": [],
 		"typeProperties": {
-			"tableName": "\"V500\".\"CLINICAL_EVENT\""
+			"tableName": "\"V500\".\"CHARGE_EVENT\""
 		}
 	}
 }

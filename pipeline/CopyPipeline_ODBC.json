@@ -46,7 +46,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_x7u",
+						"referenceName": "Source_ODBC_Charge_Event",
 						"type": "DatasetReference"
 					}
 				],

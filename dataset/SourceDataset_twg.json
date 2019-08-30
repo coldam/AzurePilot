@@ -1,0 +1,16 @@
+{
+	"name": "SourceDataset_twg",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotOracleSource",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "OracleTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "V500",
+			"table": "CLINICAL_EVENT"
+		}
+	}
+}

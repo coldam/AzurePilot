@@ -52,7 +52,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_twg",
+						"referenceName": "SourceDataset_clinicalevent",
 						"type": "DatasetReference"
 					}
 				],

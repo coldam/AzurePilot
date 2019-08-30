@@ -1,5 +1,5 @@
 {
-	"name": "SourceDataset_twg",
+	"name": "SourceDataset_clinicalevent",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "PilotOracleSource",

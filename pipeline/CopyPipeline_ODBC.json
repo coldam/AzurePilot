@@ -1,9 +1,9 @@
 {
-	"name": "CopyPipeline_Millennium",
+	"name": "CopyPipeline_ODBC",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy_clinicalevent",
+				"name": "Copy_charge_event",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -16,22 +16,16 @@
 				"userProperties": [
 					{
 						"name": "Source",
-						"value": "V500.CLINICAL_EVENT"
+						"value": "\"V500\".\"CLINICAL_EVENT\""
 					},
 					{
 						"name": "Destination",
-						"value": "staginglz/V500_CLINICAL_EVENT/onemillionrecords"
+						"value": "staginglz//"
 					}
 				],
 				"typeProperties": {
 					"source": {
-						"type": "OracleSource",
-						"partitionOption": "DynamicRange",
-						"partitionSettings": {
-							"partitionColumnName": "CLINICAL_EVENT_ID",
-							"partitionUpperBound": "4999999999",
-							"partitionLowerBound": "4900000000"
-						}
+						"type": "OdbcSource"
 					},
 					"sink": {
 						"type": "ParquetSink",
@@ -52,13 +46,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDataset_clinicalevent",
+						"referenceName": "Source_ODBC_Charge_Event",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "DestinationDataset_clinicalevent",
+						"referenceName": "Destination_parquet_charge_event",
 						"type": "DatasetReference"
 					}
 				]

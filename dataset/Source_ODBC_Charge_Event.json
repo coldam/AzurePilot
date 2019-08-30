@@ -1,0 +1,15 @@
+{
+	"name": "Source_ODBC_Charge_Event",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PocOdbcProd2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "OdbcTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "\"V500\".\"CHARGE_EVENT\""
+		}
+	}
+}

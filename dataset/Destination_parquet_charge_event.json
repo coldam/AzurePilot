@@ -1,5 +1,5 @@
 {
-	"name": "DestinationDataset_twg",
+	"name": "Destination_parquet_charge_event",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "PilotBlobStorage",
@@ -10,8 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "onemillionrecords",
-				"folderPath": "V500_CLINICAL_EVENT",
+				"folderPath": "chargeevent",
 				"container": "staginglz"
 			},
 			"compressionCodec": "snappy"

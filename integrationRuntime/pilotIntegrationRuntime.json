@@ -1,6 +1,12 @@
 {
 	"name": "pilotIntegrationRuntime",
 	"properties": {
-		"type": "SelfHosted"
+		"type": "SelfHosted",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/566c0405-de59-4f99-9782-078bcab517f4/resourcegroups/Pilot2Vitals/providers/Microsoft.DataFactory/factories/IngestionDataFactory/integrationruntimes/pilotIntegrationRuntime",
+				"authorizationType": "Rbac"
+			}
+		}
 	}
 }

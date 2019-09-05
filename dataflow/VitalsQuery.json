@@ -1,6 +1,7 @@
 {
-	"name": "dataflow1",
+	"name": "VitalsQuery",
 	"properties": {
+		"description": "Query to combine tables into the Vitals dataset\n",
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
@@ -16,12 +17,16 @@
 						"referenceName": "StagingData",
 						"type": "DatasetReference"
 					},
-					"name": "person"
+					"name": "prsnl"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
-			"script": "\n\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['V500_CLINICAL_EVENT']) ~> clinicalevent\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['raw_mill_person']) ~> person"
+			"transformations": [
+				{
+					"name": "performedprsnl"
+				}
+			],
+			"script": "\n\nsource(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['V500_CLINICAL_EVENT/*']) ~> clinicalevent\nsource(output(\n\t\t\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['raw_mill_prsnl']) ~> prsnl\nclinicalevent, prsnl join(ERROR_FUNCTION('') == ERROR_FUNCTION(''),\n\tjoinType:'inner',\n\tbroadcast: 'none')~> performedprsnl"
 		}
 	}
 }

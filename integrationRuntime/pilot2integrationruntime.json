@@ -1,0 +1,6 @@
+{
+	"name": "pilot2integrationruntime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

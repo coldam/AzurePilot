@@ -7,26 +7,15 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "StagingData",
+						"referenceName": "StagedClinicalEvent",
 						"type": "DatasetReference"
 					},
 					"name": "clinicalevent"
-				},
-				{
-					"dataset": {
-						"referenceName": "StagingData",
-						"type": "DatasetReference"
-					},
-					"name": "prsnl"
 				}
 			],
 			"sinks": [],
-			"transformations": [
-				{
-					"name": "performedprsnl"
-				}
-			],
-			"script": "\n\nsource(allowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['V500_CLINICAL_EVENT/*']) ~> clinicalevent\nsource(output(\n\t\t\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true,\n\twildcardPaths:['raw_mill_prsnl']) ~> prsnl\nclinicalevent, prsnl join(ERROR_FUNCTION('') == ERROR_FUNCTION(''),\n\tjoinType:'inner',\n\tbroadcast: 'none')~> performedprsnl"
+			"transformations": [],
+			"script": "\n\nsource(output(\n\t\tCLINICAL_EVENT_ID as double,\n\t\tENCNTR_ID as double,\n\t\tPERSON_ID as double,\n\t\tUTC_TMP2_4 as timestamp,\n\t\tENCNTR_FINANCIAL_ID as double,\n\t\tEVENT_ID as double,\n\t\tUTC_TMP2_7 as timestamp,\n\t\tEVENT_TITLE_TEXT as string,\n\t\tVIEW_LEVEL as double,\n\t\tORDER_ID as double,\n\t\tCATALOG_CD as double,\n\t\tSERIES_REF_NBR as string,\n\t\tACCESSION_NBR as string,\n\t\tCONTRIBUTOR_SYSTEM_CD as double,\n\t\tREFERENCE_NBR as string,\n\t\tPARENT_EVENT_ID as double,\n\t\tEVENT_RELTN_CD as double,\n\t\tUTC_TMP2_18 as timestamp,\n\t\tEVENT_CLASS_CD as double,\n\t\tEVENT_CD as double,\n\t\tEVENT_TAG as string,\n\t\tUTC_TMP2_22 as timestamp,\n\t\tEVENT_END_DT_TM_OS as double,\n\t\tRESULT_VAL as string,\n\t\tRESULT_UNITS_CD as double,\n\t\tRESULT_TIME_UNITS_CD as double,\n\t\tTASK_ASSAY_CD as double,\n\t\tRECORD_STATUS_CD as double,\n\t\tRESULT_STATUS_CD as double,\n\t\tAUTHENTIC_FLAG as double,\n\t\tPUBLISH_FLAG as double,\n\t\tQC_REVIEW_CD as double,\n\t\tNORMALCY_CD as double,\n\t\tNORMALCY_METHOD_CD as double,\n\t\tINQUIRE_SECURITY_CD as double,\n\t\tRESOURCE_GROUP_CD as double,\n\t\tRESOURCE_CD as double,\n\t\tSUBTABLE_BIT_MAP as double,\n\t\tCOLLATING_SEQ as string,\n\t\tUTC_TMP2_40 as timestamp,\n\t\tVERIFIED_PRSNL_ID as double,\n\t\tUTC_TMP2_42 as timestamp,\n\t\tPERFORMED_PRSNL_ID as double,\n\t\tUTC_TMP2_44 as timestamp,\n\t\tUPDT_ID as double,\n\t\tUPDT_TASK as double,\n\t\tUPDT_CNT as double,\n\t\tUPDT_APPLCTX as double,\n\t\tNORMAL_LOW as string,\n\t\tNORMAL_HIGH as string,\n\t\tCRITICAL_LOW as string,\n\t\tCRITICAL_HIGH as string,\n\t\tUTC_TMP2_53 as timestamp,\n\t\tEVENT_TAG_SET_FLAG as double,\n\t\tNOTE_IMPORTANCE_BIT_MAP as double,\n\t\tUTC_TMP2_56 as timestamp,\n\t\tORDER_ACTION_SEQUENCE as double,\n\t\tENTRY_MODE_CD as double,\n\t\tSOURCE_CD as double,\n\t\tCLINICAL_SEQ as string,\n\t\tEVENT_END_TZ as double,\n\t\tEVENT_START_TZ as double,\n\t\tPERFORMED_TZ as double,\n\t\tVERIFIED_TZ as double,\n\t\tTASK_ASSAY_VERSION_NBR as double,\n\t\tMODIFIER_LONG_TEXT_ID as double,\n\t\tSRC_EVENT_ID as double,\n\t\tUTC_TMP2_68 as timestamp,\n\t\tCE_DYNAMIC_LABEL_ID as double,\n\t\tNOMEN_STRING_FLAG as double,\n\t\tLAST_UTC_TS as timestamp,\n\t\tDEVICE_FREE_TXT as string,\n\t\tTRAIT_BIT_MAP as double,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as double,\n\t\tVALID_UNTIL_DT_TM as timestamp,\n\t\tVERIFIED_DT_TM as timestamp,\n\t\tVALID_FROM_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tSRC_CLINSIG_UPDT_DT_TM as timestamp,\n\t\tPERFORMED_DT_TM as timestamp,\n\t\tEXPIRATION_DT_TM as timestamp,\n\t\tEVENT_START_DT_TM as timestamp,\n\t\tEVENT_END_DT_TM as timestamp,\n\t\tCLINSIG_UPDT_DT_TM as timestamp,\n\t\tINST_ID as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinferDriftedColumnTypes: true) ~> clinicalevent"
 		}
 	}
 }

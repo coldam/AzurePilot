@@ -1,0 +1,217 @@
+{
+	"name": "StagedPrsnl",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "raw_mill_prsnl",
+				"container": "staginglz"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "PERSON_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_CNT",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_TASK",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_APPLCTX",
+				"type": "INT64"
+			},
+			{
+				"name": "ACTIVE_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "ACTIVE_STATUS_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "ACTIVE_STATUS_PRSNL_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "CREATE_PRSNL_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "NAME_LAST_KEY",
+				"type": "UTF8"
+			},
+			{
+				"name": "NAME_FIRST_KEY",
+				"type": "UTF8"
+			},
+			{
+				"name": "PRSNL_TYPE_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "NAME_FULL_FORMATTED",
+				"type": "UTF8"
+			},
+			{
+				"name": "PASSWORD",
+				"type": "UTF8"
+			},
+			{
+				"name": "EMAIL",
+				"type": "UTF8"
+			},
+			{
+				"name": "PHYSICIAN_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "POSITION_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "DEPARTMENT_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "FREE_TEXT_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "SECTION_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "DATA_STATUS_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "DATA_STATUS_PRSNL_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "CONTRIBUTOR_SYSTEM_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "NAME_LAST",
+				"type": "UTF8"
+			},
+			{
+				"name": "NAME_FIRST",
+				"type": "UTF8"
+			},
+			{
+				"name": "USERNAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "FT_ENTITY_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "FT_ENTITY_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "PRIM_ASSIGN_LOC_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "LOG_ACCESS_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "LOG_LEVEL",
+				"type": "INT32"
+			},
+			{
+				"name": "NAME_FIRST_KEY_NLS",
+				"type": "UTF8"
+			},
+			{
+				"name": "NAME_LAST_KEY_NLS",
+				"type": "UTF8"
+			},
+			{
+				"name": "PHYSICIAN_STATUS_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "LOGICAL_DOMAIN_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "LOGICAL_DOMAIN_GRP_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "NAME_FIRST_KEY_A_NLS",
+				"type": "UTF8"
+			},
+			{
+				"name": "NAME_LAST_KEY_A_NLS",
+				"type": "UTF8"
+			},
+			{
+				"name": "LAST_UTC_TS",
+				"type": "INT96"
+			},
+			{
+				"name": "EXTERNAL_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "TXN_ID_TEXT",
+				"type": "UTF8"
+			},
+			{
+				"name": "ACTIVE_STATUS_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "BEG_EFFECTIVE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "CREATE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "DATA_STATUS_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "UPDT_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "END_EFFECTIVE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "INST_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "DW_Refresh_DT_TM",
+				"type": "INT96"
+			}
+		]
+	}
+}

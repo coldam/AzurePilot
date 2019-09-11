@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE UPPER(sourceDB) = 'ORACLE'"
+						"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE UPPER(sourceDB) = 'ORACLE' and incrementalCopyFlag = 0"
 					},
 					"dataset": {
 						"referenceName": "SourceTableList",

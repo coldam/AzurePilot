@@ -1,5 +1,5 @@
 {
-	"name": "trigger1",
+	"name": "IncrementalMillenniumLoad",
 	"properties": {
 		"description": "Daily run of tables from dbo.tablesToStage where incrementalCopyFlag = 1",
 		"annotations": [],

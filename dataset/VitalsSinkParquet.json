@@ -1,0 +1,157 @@
+{
+	"name": "VitalsSinkParquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "vitals",
+				"container": "destinationlz"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "CODE_SET",
+				"type": "INT32"
+			},
+			{
+				"name": "DISPLAY",
+				"type": "UTF8"
+			},
+			{
+				"name": "DISPLAY_KEY",
+				"type": "UTF8"
+			},
+			{
+				"name": "DESCRIPTION",
+				"type": "UTF8"
+			},
+			{
+				"name": "DEFINITION",
+				"type": "UTF8"
+			},
+			{
+				"name": "TABLE_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "CONTRIBUTOR",
+				"type": "UTF8"
+			},
+			{
+				"name": "OWNER_MODULE",
+				"type": "UTF8"
+			},
+			{
+				"name": "CACHE_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "EXTENSION_IND",
+				"type": "INT32"
+			},
+			{
+				"name": "ADD_ACCESS_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "CHG_ACCESS_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "DEL_ACCESS_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "INQ_ACCESS_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "DOMAIN_QUALIFIER_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "DOMAIN_CODE_SET",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_CNT",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_TASK",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_APPLCTX",
+				"type": "INT64"
+			},
+			{
+				"name": "CODE_SET_HITS",
+				"type": "INT32"
+			},
+			{
+				"name": "CODE_VALUES_CNT",
+				"type": "INT32"
+			},
+			{
+				"name": "DEF_DUP_RULE_FLAG",
+				"type": "INT32"
+			},
+			{
+				"name": "CDF_MEANING_DUP_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "DISPLAY_KEY_DUP_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "ACTIVE_IND_DUP_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "DISPLAY_DUP_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "ALIAS_DUP_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "DEFINITION_DUP_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "LAST_UTC_TS",
+				"type": "INT96"
+			},
+			{
+				"name": "TXN_ID_TEXT",
+				"type": "UTF8"
+			},
+			{
+				"name": "UPDT_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "INST_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "DW_Refresh_DT_TM",
+				"type": "INT96"
+			}
+		]
+	}
+}

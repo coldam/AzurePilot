@@ -1,0 +1,64 @@
+{
+	"name": "CopyPipeline_ODBC",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_charge_event",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "\"V500\".\"CLINICAL_EVENT\""
+					},
+					{
+						"name": "Destination",
+						"value": "staginglz//"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "OdbcSource"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"maxConcurrentConnections": 16
+						}
+					},
+					"enableStaging": false,
+					"enableSkipIncompatibleRow": true,
+					"redirectIncompatibleRowSettings": {
+						"linkedServiceName": {
+							"referenceName": "PilotBlobStorage",
+							"type": "LinkedServiceReference"
+						},
+						"path": "staginglz/V500_CLINICAL_EVENT"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_ODBC_Charge_Event",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Destination_parquet_charge_event",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

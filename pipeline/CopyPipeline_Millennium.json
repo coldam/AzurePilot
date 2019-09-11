@@ -1,0 +1,70 @@
+{
+	"name": "CopyPipeline_Millennium",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_clinicalevent",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "V500.CLINICAL_EVENT"
+					},
+					{
+						"name": "Destination",
+						"value": "staginglz/V500_CLINICAL_EVENT/onemillionrecords"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "OracleSource",
+						"partitionOption": "DynamicRange",
+						"partitionSettings": {
+							"partitionColumnName": "CLINICAL_EVENT_ID",
+							"partitionUpperBound": "4999999999",
+							"partitionLowerBound": "4900000000"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings",
+							"maxConcurrentConnections": 16
+						}
+					},
+					"enableStaging": false,
+					"enableSkipIncompatibleRow": true,
+					"redirectIncompatibleRowSettings": {
+						"linkedServiceName": {
+							"referenceName": "PilotBlobStorage",
+							"type": "LinkedServiceReference"
+						},
+						"path": "staginglz/V500_CLINICAL_EVENT"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_clinicalevent",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_clinicalevent",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

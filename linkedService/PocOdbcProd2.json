@@ -1,5 +1,6 @@
 {
 	"name": "PocOdbcProd2",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "Odbc",

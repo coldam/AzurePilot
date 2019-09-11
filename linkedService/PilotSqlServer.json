@@ -1,5 +1,6 @@
 {
 	"name": "PilotSqlServer",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"annotations": [],
 		"type": "SqlServer",

@@ -1,0 +1,40 @@
+{
+	"name": "SourceTableList",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotAzureSqlDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "stageTableID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "schemaName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "tableName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "srcQuery",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LastExecutionTime",
+				"type": "datetime2",
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "SourceTables"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

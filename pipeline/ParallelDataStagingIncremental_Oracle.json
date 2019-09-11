@@ -119,7 +119,7 @@
 									"type": "ParquetSink",
 									"storeSettings": {
 										"type": "AzureBlobStorageWriteSettings",
-										"maxConcurrentConnections": 8
+										"maxConcurrentConnections": 16
 									}
 								},
 								"enableStaging": false

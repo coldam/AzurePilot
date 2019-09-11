@@ -11,5 +11,6 @@
 		"typeProperties": {
 			"tableName": "\"V500\".\"CHARGE_EVENT\""
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

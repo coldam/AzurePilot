@@ -16,7 +16,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"folderPath": {
-					"value": "/@{dataset().TableName}/@{formatDateTime(utcnow(),'yyyy-mm-dd')}",
+					"value": "/@{dataset().TableName}",
 					"type": "Expression"
 				},
 				"container": "staginglz"

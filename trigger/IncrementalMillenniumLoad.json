@@ -4,7 +4,14 @@
 		"description": "Daily run of tables from dbo.tablesToStage where incrementalCopyFlag = 1",
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [],
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "ParallelDataStagingIncremental_Oracle",
+					"type": "PipelineReference"
+				}
+			}
+		],
 		"type": "ScheduleTrigger",
 		"typeProperties": {
 			"recurrence": {

@@ -1,0 +1,42 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "IngestionDataFactoryCentral"
+		},
+		"PocOdbcProd2_credential": {
+			"value": ""
+		},
+		"PilotAzureKeyVault_properties_typeProperties_baseUrl": {
+			"value": "https://PilotKeyVault.vault.azure.net/"
+		},
+		"PilotAzureSqlDatabase_properties_typeProperties_connectionString_secretName": {
+			"value": "poctestconstr"
+		},
+		"PilotBlobStorage_properties_typeProperties_connectionString_secretName": {
+			"value": "pilotblobstorageconnectionstring"
+		},
+		"PilotOracleSource_properties_typeProperties_connectionString_secretName": {
+			"value": "pilotoracleconstr"
+		},
+		"PilotSqlServer_properties_typeProperties_connectionString_secretName": {
+			"value": "pilotAthenaconstr"
+		},
+		"PocOdbcProd2_properties_typeProperties_connectionString_secretName": {
+			"value": "PocOdbcProd2"
+		},
+		"PocOdbcProd2_properties_typeProperties_userName": {
+			"value": "v500_read"
+		},
+		"pilotIntegrationRuntime_properties_typeProperties_linkedInfo_resourceId": {
+			"value": "/subscriptions/566c0405-de59-4f99-9782-078bcab517f4/resourcegroups/Pilot2Vitals/providers/Microsoft.DataFactory/factories/IngestionDataFactory/integrationruntimes/pilotIntegrationRuntime"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

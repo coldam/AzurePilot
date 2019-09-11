@@ -1,0 +1,125 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "IngestionDataFactoryCentral"
+		},
+		"PocOdbcProd2_credential": {
+			"type": "secureString",
+			"metadata": "Secure string for 'credential' of 'PocOdbcProd2'"
+		},
+		"PilotAzureKeyVault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://PilotKeyVault.vault.azure.net/"
+		},
+		"PilotAzureSqlDatabase_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "poctestconstr"
+		},
+		"PilotBlobStorage_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "pilotblobstorageconnectionstring"
+		},
+		"PilotOracleSource_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "pilotoracleconstr"
+		},
+		"PilotSqlServer_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "pilotAthenaconstr"
+		},
+		"PocOdbcProd2_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "PocOdbcProd2"
+		},
+		"PocOdbcProd2_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "v500_read"
+		},
+		"pilotIntegrationRuntime_properties_typeProperties_linkedInfo_resourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/566c0405-de59-4f99-9782-078bcab517f4/resourcegroups/Pilot2Vitals/providers/Microsoft.DataFactory/factories/IngestionDataFactory/integrationruntimes/pilotIntegrationRuntime"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas Token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"PocOdbcProd2_credential": {
+						"value": "[parameters('PocOdbcProd2_credential')]"
+					},
+					"PilotAzureKeyVault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('PilotAzureKeyVault_properties_typeProperties_baseUrl')]"
+					},
+					"pilotIntegrationRuntime_properties_typeProperties_linkedInfo_resourceId": {
+						"value": "[parameters('pilotIntegrationRuntime_properties_typeProperties_linkedInfo_resourceId')]"
+					},
+					"PilotAzureSqlDatabase_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('PilotAzureSqlDatabase_properties_typeProperties_connectionString_secretName')]"
+					},
+					"PilotBlobStorage_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('PilotBlobStorage_properties_typeProperties_connectionString_secretName')]"
+					},
+					"PilotOracleSource_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('PilotOracleSource_properties_typeProperties_connectionString_secretName')]"
+					},
+					"PilotSqlServer_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('PilotSqlServer_properties_typeProperties_connectionString_secretName')]"
+					},
+					"PocOdbcProd2_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('PocOdbcProd2_properties_typeProperties_connectionString_secretName')]"
+					},
+					"PocOdbcProd2_properties_typeProperties_userName": {
+						"value": "[parameters('PocOdbcProd2_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_0')]"
+			]
+		}
+	]
+}

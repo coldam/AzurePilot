@@ -1,0 +1,1916 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "IngestionDataFactoryCentral"
+		},
+		"PocOdbcProd2_credential": {
+			"type": "secureString",
+			"metadata": "Secure string for 'credential' of 'PocOdbcProd2'"
+		},
+		"PilotAzureKeyVault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://PilotKeyVault.vault.azure.net/"
+		},
+		"pilotIntegrationRuntime_properties_typeProperties_linkedInfo_resourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/566c0405-de59-4f99-9782-078bcab517f4/resourcegroups/Pilot2Vitals/providers/Microsoft.DataFactory/factories/IngestionDataFactory/integrationruntimes/pilotIntegrationRuntime"
+		},
+		"PilotAzureSqlDatabase_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "poctestconstr"
+		},
+		"PilotBlobStorage_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "pilotblobstorageconnectionstring"
+		},
+		"PilotOracleSource_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "pilotoracleconstr"
+		},
+		"PilotSqlServer_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "pilotAthenaconstr"
+		},
+		"PocOdbcProd2_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "PocOdbcProd2"
+		},
+		"PocOdbcProd2_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "v500_read"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/PilotAzureKeyVault')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('PilotAzureKeyVault_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger_copy_from_mill')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Month",
+						"interval": 1,
+						"startTime": "2019-08-30T14:55:00Z",
+						"endTime": "2019-08-31T14:55:00Z",
+						"timeZone": "UTC",
+						"schedule": {
+							"monthDays": [
+								16
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger_vitals_dataflow')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Week",
+						"interval": 1,
+						"startTime": "2019-09-11T15:10:00Z",
+						"timeZone": "UTC",
+						"schedule": {
+							"weekDays": [
+								"Wednesday"
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pilotIntegrationRuntime')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {
+					"linkedInfo": {
+						"resourceId": "[parameters('pilotIntegrationRuntime_properties_typeProperties_linkedInfo_resourceId')]",
+						"authorizationType": "Rbac"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PilotAzureSqlDatabase')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "PilotAzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('PilotAzureSqlDatabase_properties_typeProperties_connectionString_secretName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PilotBlobStorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "PilotAzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('PilotBlobStorage_properties_typeProperties_connectionString_secretName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PilotOracleSource')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Oracle",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "PilotAzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('PilotOracleSource_properties_typeProperties_connectionString_secretName')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "pilotIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/pilotIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PilotSqlServer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "PilotAzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('PilotSqlServer_properties_typeProperties_connectionString_secretName')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "pilotIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/pilotIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PocOdbcProd2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Odbc",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "PilotAzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('PocOdbcProd2_properties_typeProperties_connectionString_secretName')]"
+					},
+					"authenticationType": "Basic",
+					"userName": "[parameters('PocOdbcProd2_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "PilotAzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "PocV500Read"
+					},
+					"credential": {
+						"type": "SecureString",
+						"value": "[parameters('PocOdbcProd2_credential')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "pilotIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/pilotIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_clinicalevent')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "V500_CLINICAL_EVENT",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CLINICAL_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENCNTR_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERSON_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_4",
+						"type": "INT_96"
+					},
+					{
+						"name": "ENCNTR_FINANCIAL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_7",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_TITLE_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "VIEW_LEVEL",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ORDER_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CATALOG_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SERIES_REF_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "ACCESSION_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "REFERENCE_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "PARENT_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_RELTN_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_18",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_CLASS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_TAG",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_22",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_END_DT_TM_OS",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_VAL",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_TIME_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RECORD_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "AUTHENTIC_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PUBLISH_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "QC_REVIEW_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_METHOD_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "INQUIRE_SECURITY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_GROUP_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SUBTABLE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "COLLATING_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_40",
+						"type": "INT_96"
+					},
+					{
+						"name": "VERIFIED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_42",
+						"type": "INT_96"
+					},
+					{
+						"name": "PERFORMED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_44",
+						"type": "INT_96"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "NORMAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_53",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_TAG_SET_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOTE_IMPORTANCE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_56",
+						"type": "INT_96"
+					},
+					{
+						"name": "ORDER_ACTION_SEQUENCE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENTRY_MODE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CLINICAL_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "EVENT_END_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_START_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERFORMED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VERIFIED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_VERSION_NBR",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "MODIFIER_LONG_TEXT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SRC_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_68",
+						"type": "INT_96"
+					},
+					{
+						"name": "CE_DYNAMIC_LABEL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOMEN_STRING_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT_96"
+					},
+					{
+						"name": "DEVICE_FREE_TXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "TRAIT_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "CLU_SUBKEY1_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VALID_UNTIL_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "VERIFIED_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "VALID_FROM_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "SRC_CLINSIG_UPDT_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "PERFORMED_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "EXPIRATION_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_START_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_END_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "CLINSIG_UPDT_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Destination_parquet_charge_event')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "chargeevent",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CLINICAL_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENCNTR_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERSON_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_4",
+						"type": "INT_96"
+					},
+					{
+						"name": "ENCNTR_FINANCIAL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_7",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_TITLE_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "VIEW_LEVEL",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ORDER_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CATALOG_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SERIES_REF_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "ACCESSION_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "REFERENCE_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "PARENT_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_RELTN_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_18",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_CLASS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_TAG",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_22",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_END_DT_TM_OS",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_VAL",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_TIME_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RECORD_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "AUTHENTIC_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PUBLISH_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "QC_REVIEW_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_METHOD_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "INQUIRE_SECURITY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_GROUP_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SUBTABLE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "COLLATING_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_40",
+						"type": "INT_96"
+					},
+					{
+						"name": "VERIFIED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_42",
+						"type": "INT_96"
+					},
+					{
+						"name": "PERFORMED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_44",
+						"type": "INT_96"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "NORMAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_53",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_TAG_SET_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOTE_IMPORTANCE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_56",
+						"type": "INT_96"
+					},
+					{
+						"name": "ORDER_ACTION_SEQUENCE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENTRY_MODE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CLINICAL_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "EVENT_END_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_START_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERFORMED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VERIFIED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_VERSION_NBR",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "MODIFIER_LONG_TEXT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SRC_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_68",
+						"type": "INT_96"
+					},
+					{
+						"name": "CE_DYNAMIC_LABEL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOMEN_STRING_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT_96"
+					},
+					{
+						"name": "DEVICE_FREE_TXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "TRAIT_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "CLU_SUBKEY1_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VALID_UNTIL_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "VERIFIED_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "VALID_FROM_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "SRC_CLINSIG_UPDT_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "PERFORMED_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "EXPIRATION_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_START_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "EVENT_END_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "CLINSIG_UPDT_DT_TM",
+						"type": "INT_96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParallelDataStagingOracle')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotOracleSource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "OracleTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "test",
+					"table": "test"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotOracleSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PlaceholderSourceTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotSqlServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "placeholder"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotSqlServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_clinicalevent')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotOracleSource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "OracleTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "V500",
+					"table": "CLINICAL_EVENT"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotOracleSource')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SourceTableList')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotAzureSqlDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "stageTableID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "schemaName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tableName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "srcQuery",
+						"type": "nvarchar"
+					},
+					{
+						"name": "LastExecutionTime",
+						"type": "datetime2",
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "SourceTables"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureSqlDatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Source_ODBC_Charge_Event')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PocOdbcProd2",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "OdbcTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "\"V500\".\"CHARGE_EVENT\""
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PocOdbcProd2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StagedClinicalEvent')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "V500_CLINICAL_EVENT",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CLINICAL_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENCNTR_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERSON_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_4",
+						"type": "INT96"
+					},
+					{
+						"name": "ENCNTR_FINANCIAL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_7",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_TITLE_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "VIEW_LEVEL",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ORDER_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CATALOG_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SERIES_REF_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "ACCESSION_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "REFERENCE_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "PARENT_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_RELTN_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_18",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_CLASS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_TAG",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_22",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_END_DT_TM_OS",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_VAL",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_TIME_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RECORD_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "AUTHENTIC_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PUBLISH_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "QC_REVIEW_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_METHOD_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "INQUIRE_SECURITY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_GROUP_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SUBTABLE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "COLLATING_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_40",
+						"type": "INT96"
+					},
+					{
+						"name": "VERIFIED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_42",
+						"type": "INT96"
+					},
+					{
+						"name": "PERFORMED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_44",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "NORMAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_53",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_TAG_SET_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOTE_IMPORTANCE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_56",
+						"type": "INT96"
+					},
+					{
+						"name": "ORDER_ACTION_SEQUENCE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENTRY_MODE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CLINICAL_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "EVENT_END_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_START_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERFORMED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VERIFIED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_VERSION_NBR",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "MODIFIER_LONG_TEXT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SRC_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_68",
+						"type": "INT96"
+					},
+					{
+						"name": "CE_DYNAMIC_LABEL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOMEN_STRING_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT96"
+					},
+					{
+						"name": "DEVICE_FREE_TXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "TRAIT_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "CLU_SUBKEY1_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VALID_UNTIL_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "VERIFIED_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "VALID_FROM_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "SRC_CLINSIG_UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "PERFORMED_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EXPIRATION_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_START_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_END_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "CLINSIG_UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StagedCodeValue')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "raw_mill_code_value",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CODE_VALUE",
+						"type": "INT64"
+					},
+					{
+						"name": "CODE_SET",
+						"type": "INT32"
+					},
+					{
+						"name": "CDF_MEANING",
+						"type": "UTF8"
+					},
+					{
+						"name": "DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "DISPLAY_KEY",
+						"type": "UTF8"
+					},
+					{
+						"name": "DESCRIPTION",
+						"type": "UTF8"
+					},
+					{
+						"name": "DEFINITION",
+						"type": "UTF8"
+					},
+					{
+						"name": "COLLATION_SEQ",
+						"type": "INT32"
+					},
+					{
+						"name": "ACTIVE_TYPE_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "ACTIVE_IND",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "INT64"
+					},
+					{
+						"name": "DATA_STATUS_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "DATA_STATUS_PRSNL_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "ACTIVE_STATUS_PRSNL_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "CKI",
+						"type": "UTF8"
+					},
+					{
+						"name": "DISPLAY_KEY_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "CONCEPT_CKI",
+						"type": "UTF8"
+					},
+					{
+						"name": "DISPLAY_KEY_A_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT96"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "CLU_SUBKEY1_FLAG",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "ACTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "BEGIN_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "DATA_STATUS_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INACTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "END_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "DW_Refresh_DT_TM",
+						"type": "INT96"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StagedPrsnl')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "raw_mill_prsnl",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "PERSON_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "INT64"
+					},
+					{
+						"name": "ACTIVE_IND",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "ACTIVE_STATUS_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "ACTIVE_STATUS_PRSNL_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "CREATE_PRSNL_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "NAME_LAST_KEY",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_FIRST_KEY",
+						"type": "UTF8"
+					},
+					{
+						"name": "PRSNL_TYPE_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "NAME_FULL_FORMATTED",
+						"type": "UTF8"
+					},
+					{
+						"name": "PASSWORD",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL",
+						"type": "UTF8"
+					},
+					{
+						"name": "PHYSICIAN_IND",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "POSITION_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "DEPARTMENT_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "FREE_TEXT_IND",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "SECTION_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "DATA_STATUS_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "DATA_STATUS_PRSNL_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "NAME_LAST",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_FIRST",
+						"type": "UTF8"
+					},
+					{
+						"name": "USERNAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "FT_ENTITY_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "FT_ENTITY_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "PRIM_ASSIGN_LOC_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "LOG_ACCESS_IND",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "LOG_LEVEL",
+						"type": "INT32"
+					},
+					{
+						"name": "NAME_FIRST_KEY_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_LAST_KEY_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "PHYSICIAN_STATUS_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "LOGICAL_DOMAIN_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "LOGICAL_DOMAIN_GRP_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "NAME_FIRST_KEY_A_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_LAST_KEY_A_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT96"
+					},
+					{
+						"name": "EXTERNAL_IND",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "ACTIVE_STATUS_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "BEG_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "CREATE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "DATA_STATUS_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "END_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "DW_Refresh_DT_TM",
+						"type": "INT96"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StagingData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "/@{dataset().TableName}",
+							"type": "Expression"
+						},
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		}
+	]
+}

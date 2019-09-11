@@ -1,0 +1,32 @@
+{
+	"name": "PocOdbcProd2",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "Odbc",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "PilotAzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "PocOdbcProd2"
+			},
+			"authenticationType": "Basic",
+			"userName": "v500_read",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "PilotAzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "PocV500Read"
+			}
+		},
+		"connectVia": {
+			"referenceName": "pilotIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

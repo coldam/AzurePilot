@@ -1,0 +1,366 @@
+{
+	"name": "StagedClinicalEvent",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "V500_CLINICAL_EVENT",
+				"container": "staginglz"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "CLINICAL_EVENT_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "ENCNTR_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "PERSON_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UTC_TMP2_4",
+				"type": "INT96"
+			},
+			{
+				"name": "ENCNTR_FINANCIAL_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "EVENT_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UTC_TMP2_7",
+				"type": "INT96"
+			},
+			{
+				"name": "EVENT_TITLE_TEXT",
+				"type": "UTF8"
+			},
+			{
+				"name": "VIEW_LEVEL",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "ORDER_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "CATALOG_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "SERIES_REF_NBR",
+				"type": "UTF8"
+			},
+			{
+				"name": "ACCESSION_NBR",
+				"type": "UTF8"
+			},
+			{
+				"name": "CONTRIBUTOR_SYSTEM_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "REFERENCE_NBR",
+				"type": "UTF8"
+			},
+			{
+				"name": "PARENT_EVENT_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "EVENT_RELTN_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UTC_TMP2_18",
+				"type": "INT96"
+			},
+			{
+				"name": "EVENT_CLASS_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "EVENT_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "EVENT_TAG",
+				"type": "UTF8"
+			},
+			{
+				"name": "UTC_TMP2_22",
+				"type": "INT96"
+			},
+			{
+				"name": "EVENT_END_DT_TM_OS",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "RESULT_VAL",
+				"type": "UTF8"
+			},
+			{
+				"name": "RESULT_UNITS_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "RESULT_TIME_UNITS_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "TASK_ASSAY_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "RECORD_STATUS_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "RESULT_STATUS_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "AUTHENTIC_FLAG",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "PUBLISH_FLAG",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "QC_REVIEW_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "NORMALCY_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "NORMALCY_METHOD_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "INQUIRE_SECURITY_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "RESOURCE_GROUP_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "RESOURCE_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "SUBTABLE_BIT_MAP",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "COLLATING_SEQ",
+				"type": "UTF8"
+			},
+			{
+				"name": "UTC_TMP2_40",
+				"type": "INT96"
+			},
+			{
+				"name": "VERIFIED_PRSNL_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UTC_TMP2_42",
+				"type": "INT96"
+			},
+			{
+				"name": "PERFORMED_PRSNL_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UTC_TMP2_44",
+				"type": "INT96"
+			},
+			{
+				"name": "UPDT_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UPDT_TASK",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UPDT_CNT",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UPDT_APPLCTX",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "NORMAL_LOW",
+				"type": "UTF8"
+			},
+			{
+				"name": "NORMAL_HIGH",
+				"type": "UTF8"
+			},
+			{
+				"name": "CRITICAL_LOW",
+				"type": "UTF8"
+			},
+			{
+				"name": "CRITICAL_HIGH",
+				"type": "UTF8"
+			},
+			{
+				"name": "UTC_TMP2_53",
+				"type": "INT96"
+			},
+			{
+				"name": "EVENT_TAG_SET_FLAG",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "NOTE_IMPORTANCE_BIT_MAP",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UTC_TMP2_56",
+				"type": "INT96"
+			},
+			{
+				"name": "ORDER_ACTION_SEQUENCE",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "ENTRY_MODE_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "SOURCE_CD",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "CLINICAL_SEQ",
+				"type": "UTF8"
+			},
+			{
+				"name": "EVENT_END_TZ",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "EVENT_START_TZ",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "PERFORMED_TZ",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "VERIFIED_TZ",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "TASK_ASSAY_VERSION_NBR",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "MODIFIER_LONG_TEXT_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "SRC_EVENT_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "UTC_TMP2_68",
+				"type": "INT96"
+			},
+			{
+				"name": "CE_DYNAMIC_LABEL_ID",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "NOMEN_STRING_FLAG",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "LAST_UTC_TS",
+				"type": "INT96"
+			},
+			{
+				"name": "DEVICE_FREE_TXT",
+				"type": "UTF8"
+			},
+			{
+				"name": "TRAIT_BIT_MAP",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "TXN_ID_TEXT",
+				"type": "UTF8"
+			},
+			{
+				"name": "CLU_SUBKEY1_FLAG",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "VALID_UNTIL_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "VERIFIED_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "VALID_FROM_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "UPDT_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "SRC_CLINSIG_UPDT_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "PERFORMED_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "EXPIRATION_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "EVENT_START_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "EVENT_END_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "CLINSIG_UPDT_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "INST_ID",
+				"type": "DOUBLE"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

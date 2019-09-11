@@ -1,0 +1,18 @@
+{
+	"name": "PilotBlobStorage",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "PilotAzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "pilotblobstorageconnectionstring"
+			}
+		}
+	}
+}

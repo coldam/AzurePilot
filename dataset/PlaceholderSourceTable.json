@@ -1,0 +1,17 @@
+{
+	"name": "PlaceholderSourceTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotSqlServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "placeholder"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

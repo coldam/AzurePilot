@@ -9,7 +9,7 @@
 			"recurrence": {
 				"frequency": "Week",
 				"interval": 1,
-				"startTime": "2019-09-11T15:10:00.000Z",
+				"startTime": "2019-09-11T15:10:00Z",
 				"timeZone": "UTC",
 				"schedule": {
 					"weekDays": [

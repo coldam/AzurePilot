@@ -153,5 +153,6 @@
 				"type": "INT96"
 			}
 		]
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

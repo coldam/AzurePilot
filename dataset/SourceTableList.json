@@ -35,5 +35,6 @@
 			"schema": "dbo",
 			"table": "SourceTables"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
 }

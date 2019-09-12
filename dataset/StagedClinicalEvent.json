@@ -10,6 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@{formatDateTime(utcnow(),'yyyy-MM-dd')}",
+					"type": "Expression"
+				},
 				"folderPath": "V500_CLINICAL_EVENT",
 				"container": "staginglz"
 			},

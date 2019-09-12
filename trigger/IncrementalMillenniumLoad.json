@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Daily run of tables from dbo.tablesToStage where incrementalCopyFlag = 1",
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
@@ -17,7 +17,7 @@
 			"recurrence": {
 				"frequency": "Day",
 				"interval": 1,
-				"startTime": "2019-09-12T05:00:00Z",
+				"startTime": "2019-09-12T05:00:00.000Z",
 				"timeZone": "UTC"
 			}
 		}

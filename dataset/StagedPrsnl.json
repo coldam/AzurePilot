@@ -10,11 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": "@{formatDateTime(utcnow(),'yyyy-MM-dd')}",
+				"folderPath": {
+					"value": "V500_PRSNL/@{formatDateTime(utcnow(),'yyyy-MM-dd')}",
 					"type": "Expression"
 				},
-				"folderPath": "V500_PRSNL",
 				"container": "staginglz"
 			},
 			"compressionCodec": "snappy"

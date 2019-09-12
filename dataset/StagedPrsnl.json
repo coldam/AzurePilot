@@ -10,7 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "raw_mill_prsnl",
+				"folderPath": {
+					"value": "V500_PRSNL/@{formatDateTime(utcnow(),'yyyy-MM-dd')}",
+					"type": "Expression"
+				},
 				"container": "staginglz"
 			},
 			"compressionCodec": "snappy"

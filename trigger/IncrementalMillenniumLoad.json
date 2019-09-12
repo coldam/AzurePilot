@@ -7,7 +7,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "ParallelDataStagingIncremental_Oracle",
+					"referenceName": "VitalsQueryPipeline",
 					"type": "PipelineReference"
 				}
 			}

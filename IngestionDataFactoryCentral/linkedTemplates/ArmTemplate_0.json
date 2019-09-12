@@ -1147,7 +1147,10 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "V500_CLINICAL_EVENT",
+						"folderPath": {
+							"value": "V500_CLINICAL_EVENT/@{formatDateTime(utcnow(),'yyyy-MM-dd')}",
+							"type": "Expression"
+						},
 						"container": "staginglz"
 					},
 					"compressionCodec": "snappy"
@@ -1671,7 +1674,10 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": "raw_mill_prsnl",
+						"folderPath": {
+							"value": "V500_PRSNL",
+							"type": "Expression"
+						},
 						"container": "staginglz"
 					},
 					"compressionCodec": "snappy"

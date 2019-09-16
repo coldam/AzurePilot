@@ -1,0 +1,256 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "IngestionDataFactoryCentral"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/StagedPrsnl')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "V500_PRSNL",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "PERSON_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_3",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ACTIVE_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ACTIVE_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_9",
+						"type": "INT96"
+					},
+					{
+						"name": "ACTIVE_STATUS_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CREATE_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_12",
+						"type": "INT96"
+					},
+					{
+						"name": "NAME_LAST_KEY",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_FIRST_KEY",
+						"type": "UTF8"
+					},
+					{
+						"name": "PRSNL_TYPE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NAME_FULL_FORMATTED",
+						"type": "UTF8"
+					},
+					{
+						"name": "PASSWORD",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL",
+						"type": "UTF8"
+					},
+					{
+						"name": "PHYSICIAN_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "POSITION_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "DEPARTMENT_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "FREE_TEXT_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_23",
+						"type": "INT96"
+					},
+					{
+						"name": "UTC_TMP2_24",
+						"type": "INT96"
+					},
+					{
+						"name": "SECTION_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "DATA_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_27",
+						"type": "INT96"
+					},
+					{
+						"name": "DATA_STATUS_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NAME_LAST",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_FIRST",
+						"type": "UTF8"
+					},
+					{
+						"name": "USERNAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "FT_ENTITY_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "FT_ENTITY_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PRIM_ASSIGN_LOC_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LOG_ACCESS_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LOG_LEVEL",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NAME_FIRST_KEY_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_LAST_KEY_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "PHYSICIAN_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LOGICAL_DOMAIN_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LOGICAL_DOMAIN_GRP_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NAME_FIRST_KEY_A_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_LAST_KEY_A_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT96"
+					},
+					{
+						"name": "EXTERNAL_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "ACTIVE_STATUS_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "BEG_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "CREATE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "DATA_STATUS_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "END_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": []
+		}
+	]
+}

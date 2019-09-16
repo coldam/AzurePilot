@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "VitalsQuery",
+						"referenceName": "TestVitalsQueryDF",
 						"type": "DataFlowReference"
 					}
 				}

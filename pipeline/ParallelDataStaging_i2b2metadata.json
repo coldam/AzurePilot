@@ -1,5 +1,5 @@
 {
-	"name": "ParallelDataStaging_i2b2data",
+	"name": "ParallelDataStaging_i2b2metadata",
 	"properties": {
 		"activities": [
 			{
@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'MSSQL'"
+						"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'I2B2Metadata' and active_ind = 1"
 					},
 					"dataset": {
 						"referenceName": "SourceTableList",

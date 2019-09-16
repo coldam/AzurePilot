@@ -10,363 +10,207 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "vitals",
-				"container": "destinationlz"
+				"folderPath": "raw_mill_prsnl",
+				"container": "staginglz"
 			},
 			"compressionCodec": "snappy"
 		},
 		"schema": [
 			{
-				"name": "CLINICAL_EVENT_ID",
-				"type": "DOUBLE"
+				"name": "PERSON_ID",
+				"type": "INT32"
 			},
 			{
-				"name": "Cerner_Encounter_ID",
-				"type": "DOUBLE"
+				"name": "UPDT_CNT",
+				"type": "INT32"
 			},
 			{
-				"name": "Cerner_Patient_ID",
-				"type": "DOUBLE"
+				"name": "UPDT_ID",
+				"type": "INT32"
 			},
 			{
-				"name": "Cerner_ENCNTR_FINANCIAL_ID",
-				"type": "DOUBLE"
+				"name": "UPDT_TASK",
+				"type": "INT32"
 			},
 			{
-				"name": "EVENT_ID",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "EVENT_TITLE_TEXT",
-				"type": "UTF8"
-			},
-			{
-				"name": "VIEW_LEVEL",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "ORDER_ID",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "CATALOG_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "ACCESSION_NBR",
-				"type": "UTF8"
-			},
-			{
-				"name": "CONTRIBUTOR_SYSTEM_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "PARENT_EVENT_ID",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "EVENT_RELTN_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "EVENT_CLASS_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "EVENT_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "EVENT_TAG",
-				"type": "UTF8"
-			},
-			{
-				"name": "EVENT_END_DT_TM_OS",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "RESULT_VAL",
-				"type": "UTF8"
-			},
-			{
-				"name": "RESULT_UNITS_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "RESULT_TIME_UNITS_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "TASK_ASSAY_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "RECORD_STATUS_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "RESULT_STATUS_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "AUTHENTIC_FLAG",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "PUBLISH_FLAG",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "QC_REVIEW_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "NORMALCY_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "NORMALCY_METHOD_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "RESOURCE_GROUP_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "RESOURCE_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "SUBTABLE_BIT_MAP",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "COLLATING_SEQ",
-				"type": "UTF8"
-			},
-			{
-				"name": "VERIFIED_PRSNL_ID",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "PERFORMED_PRSNL_ID",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "ce_UPDT_ID",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "ce_UPDT_TASK",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "ce_UPDT_CNT",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "ce_UPDT_APPLCTX",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "NORMAL_LOW",
-				"type": "UTF8"
-			},
-			{
-				"name": "NORMAL_HIGH",
-				"type": "UTF8"
-			},
-			{
-				"name": "CRITICAL_LOW",
-				"type": "UTF8"
-			},
-			{
-				"name": "CRITICAL_HIGH",
-				"type": "UTF8"
-			},
-			{
-				"name": "EVENT_TAG_SET_FLAG",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "NOTE_IMPORTANCE_BIT_MAP",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "ORDER_ACTION_SEQUENCE",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "ENTRY_MODE_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "SOURCE_CD",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "CLINICAL_SEQ",
-				"type": "UTF8"
-			},
-			{
-				"name": "EVENT_END_TZ",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "EVENT_START_TZ",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "PERFORMED_TZ",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "VERIFIED_TZ",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "TASK_ASSAY_VERSION_NBR",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "MODIFIER_LONG_TEXT_ID",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "SRC_EVENT_ID",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "CE_DYNAMIC_LABEL_ID",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "NOMEN_STRING_FLAG",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "ce_LAST_UTC_TS",
-				"type": "INT96"
-			},
-			{
-				"name": "DEVICE_FREE_TXT",
-				"type": "UTF8"
-			},
-			{
-				"name": "TRAIT_BIT_MAP",
-				"type": "DOUBLE"
-			},
-			{
-				"name": "VALID_UNTIL_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "VERIFIED_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "VALID_FROM_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "ce_UPDT_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "SRC_CLINSIG_UPDT_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "PERFORMED_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "EXPIRATION_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "EVENT_START_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "EVENT_END_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "CLINSIG_UPDT_DT_TM",
-				"type": "INT96"
-			},
-			{
-				"name": "UPDATE_PERSONNEL",
-				"type": "UTF8"
-			},
-			{
-				"name": "VERIFIED_PERSONNEL",
-				"type": "UTF8"
-			},
-			{
-				"name": "PERFORMING_PERSONNEL",
-				"type": "UTF8"
-			},
-			{
-				"name": "DISPLAY_EVENT",
-				"type": "UTF8"
-			},
-			{
-				"name": "CODE_VALUE",
+				"name": "UPDT_APPLCTX",
 				"type": "INT64"
 			},
 			{
-				"name": "DESCRIPTION",
+				"name": "ACTIVE_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "ACTIVE_STATUS_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "ACTIVE_STATUS_PRSNL_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "CREATE_PRSNL_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "NAME_LAST_KEY",
 				"type": "UTF8"
 			},
 			{
-				"name": "RESULT_UNIT_DISPLAY",
+				"name": "NAME_FIRST_KEY",
 				"type": "UTF8"
 			},
 			{
-				"name": "RESULT_TIME_UNIT_DISPLAY",
+				"name": "PRSNL_TYPE_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "NAME_FULL_FORMATTED",
 				"type": "UTF8"
 			},
 			{
-				"name": "RESULT_STATUS_DISPLAY",
+				"name": "PASSWORD",
 				"type": "UTF8"
 			},
 			{
-				"name": "CONTRIBUTOR_SYSTEM_DISPLAY",
+				"name": "EMAIL",
 				"type": "UTF8"
 			},
 			{
-				"name": "ENTRY_MODE_DISPLAY",
+				"name": "PHYSICIAN_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "POSITION_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "DEPARTMENT_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "FREE_TEXT_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "SECTION_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "DATA_STATUS_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "DATA_STATUS_PRSNL_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "CONTRIBUTOR_SYSTEM_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "NAME_LAST",
 				"type": "UTF8"
 			},
 			{
-				"name": "RESULT_SOURCE_DISPLAY",
+				"name": "NAME_FIRST",
 				"type": "UTF8"
 			},
 			{
-				"name": "NORMALCY_DISPLAY",
+				"name": "USERNAME",
 				"type": "UTF8"
 			},
 			{
-				"name": "NORMALCY_METHOD_DISPLAY",
+				"name": "FT_ENTITY_NAME",
 				"type": "UTF8"
 			},
 			{
-				"name": "EVENT_RELATIONSHIP_DISPLAY",
+				"name": "FT_ENTITY_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "PRIM_ASSIGN_LOC_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "LOG_ACCESS_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "LOG_LEVEL",
+				"type": "INT32"
+			},
+			{
+				"name": "NAME_FIRST_KEY_NLS",
 				"type": "UTF8"
 			},
 			{
-				"name": "RECORD_STATUS_DISPLAY",
+				"name": "NAME_LAST_KEY_NLS",
 				"type": "UTF8"
 			},
 			{
-				"name": "RESOURCE_GROUP_DISPLAY",
+				"name": "PHYSICIAN_STATUS_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "LOGICAL_DOMAIN_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "LOGICAL_DOMAIN_GRP_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "NAME_FIRST_KEY_A_NLS",
 				"type": "UTF8"
 			},
 			{
-				"name": "RESOURCE_DISPLAY",
+				"name": "NAME_LAST_KEY_A_NLS",
 				"type": "UTF8"
+			},
+			{
+				"name": "LAST_UTC_TS",
+				"type": "INT96"
+			},
+			{
+				"name": "EXTERNAL_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "TXN_ID_TEXT",
+				"type": "UTF8"
+			},
+			{
+				"name": "ACTIVE_STATUS_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "BEG_EFFECTIVE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "CREATE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "DATA_STATUS_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "UPDT_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "END_EFFECTIVE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "INST_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "DW_Refresh_DT_TM",
+				"type": "INT96"
 			}
 		]
 	},

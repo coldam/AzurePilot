@@ -191,7 +191,360 @@
 					},
 					"compressionCodec": "snappy"
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "CLINICAL_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Cerner_Encounter_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Cerner_Patient_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Cerner_ENCNTR_FINANCIAL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_TITLE_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "VIEW_LEVEL",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ORDER_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CATALOG_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ACCESSION_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PARENT_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_RELTN_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_CLASS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_TAG",
+						"type": "UTF8"
+					},
+					{
+						"name": "EVENT_END_DT_TM_OS",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_VAL",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_TIME_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RECORD_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "AUTHENTIC_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PUBLISH_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "QC_REVIEW_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_METHOD_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_GROUP_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SUBTABLE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "COLLATING_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "VERIFIED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERFORMED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ce_UPDT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ce_UPDT_TASK",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ce_UPDT_CNT",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ce_UPDT_APPLCTX",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "NORMAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "EVENT_TAG_SET_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOTE_IMPORTANCE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ORDER_ACTION_SEQUENCE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENTRY_MODE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CLINICAL_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "EVENT_END_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_START_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERFORMED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VERIFIED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_VERSION_NBR",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "MODIFIER_LONG_TEXT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SRC_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CE_DYNAMIC_LABEL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOMEN_STRING_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ce_LAST_UTC_TS",
+						"type": "INT96"
+					},
+					{
+						"name": "DEVICE_FREE_TXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "TRAIT_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VALID_UNTIL_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "VERIFIED_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "VALID_FROM_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "ce_UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "SRC_CLINSIG_UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "PERFORMED_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EXPIRATION_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_START_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_END_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "CLINSIG_UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDATE_PERSONNEL",
+						"type": "UTF8"
+					},
+					{
+						"name": "VERIFIED_PERSONNEL",
+						"type": "UTF8"
+					},
+					{
+						"name": "PERFORMING_PERSONNEL",
+						"type": "UTF8"
+					},
+					{
+						"name": "DISPLAY_EVENT",
+						"type": "UTF8"
+					},
+					{
+						"name": "CODE_VALUE",
+						"type": "INT64"
+					},
+					{
+						"name": "DESCRIPTION",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_UNIT_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_TIME_UNIT_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_STATUS_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "ENTRY_MODE_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_SOURCE_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "NORMALCY_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "NORMALCY_METHOD_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "EVENT_RELATIONSHIP_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "RECORD_STATUS_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESOURCE_GROUP_DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESOURCE_DISPLAY",
+						"type": "UTF8"
+					}
+				]
 			},
 			"dependsOn": []
 		},
@@ -1760,7 +2113,7 @@
 							"name": "ceResource"
 						}
 					],
-					"script": "\n\nsource(output(\n\t\tCLINICAL_EVENT_ID as double,\n\t\tENCNTR_ID as double,\n\t\tPERSON_ID as double,\n\t\tUTC_TMP2_4 as timestamp,\n\t\tENCNTR_FINANCIAL_ID as double,\n\t\tEVENT_ID as double,\n\t\tUTC_TMP2_7 as timestamp,\n\t\tEVENT_TITLE_TEXT as string,\n\t\tVIEW_LEVEL as double,\n\t\tORDER_ID as double,\n\t\tCATALOG_CD as double,\n\t\tSERIES_REF_NBR as string,\n\t\tACCESSION_NBR as string,\n\t\tCONTRIBUTOR_SYSTEM_CD as double,\n\t\tREFERENCE_NBR as string,\n\t\tPARENT_EVENT_ID as double,\n\t\tEVENT_RELTN_CD as double,\n\t\tUTC_TMP2_18 as timestamp,\n\t\tEVENT_CLASS_CD as double,\n\t\tEVENT_CD as double,\n\t\tEVENT_TAG as string,\n\t\tUTC_TMP2_22 as timestamp,\n\t\tEVENT_END_DT_TM_OS as double,\n\t\tRESULT_VAL as string,\n\t\tRESULT_UNITS_CD as double,\n\t\tRESULT_TIME_UNITS_CD as double,\n\t\tTASK_ASSAY_CD as double,\n\t\tRECORD_STATUS_CD as double,\n\t\tRESULT_STATUS_CD as double,\n\t\tAUTHENTIC_FLAG as double,\n\t\tPUBLISH_FLAG as double,\n\t\tQC_REVIEW_CD as double,\n\t\tNORMALCY_CD as double,\n\t\tNORMALCY_METHOD_CD as double,\n\t\tINQUIRE_SECURITY_CD as double,\n\t\tRESOURCE_GROUP_CD as double,\n\t\tRESOURCE_CD as double,\n\t\tSUBTABLE_BIT_MAP as double,\n\t\tCOLLATING_SEQ as string,\n\t\tUTC_TMP2_40 as timestamp,\n\t\tVERIFIED_PRSNL_ID as double,\n\t\tUTC_TMP2_42 as timestamp,\n\t\tPERFORMED_PRSNL_ID as double,\n\t\tUTC_TMP2_44 as timestamp,\n\t\tUPDT_ID as double,\n\t\tUPDT_TASK as double,\n\t\tUPDT_CNT as double,\n\t\tUPDT_APPLCTX as double,\n\t\tNORMAL_LOW as string,\n\t\tNORMAL_HIGH as string,\n\t\tCRITICAL_LOW as string,\n\t\tCRITICAL_HIGH as string,\n\t\tUTC_TMP2_53 as timestamp,\n\t\tEVENT_TAG_SET_FLAG as double,\n\t\tNOTE_IMPORTANCE_BIT_MAP as double,\n\t\tUTC_TMP2_56 as timestamp,\n\t\tORDER_ACTION_SEQUENCE as double,\n\t\tENTRY_MODE_CD as double,\n\t\tSOURCE_CD as double,\n\t\tCLINICAL_SEQ as string,\n\t\tEVENT_END_TZ as double,\n\t\tEVENT_START_TZ as double,\n\t\tPERFORMED_TZ as double,\n\t\tVERIFIED_TZ as double,\n\t\tTASK_ASSAY_VERSION_NBR as double,\n\t\tMODIFIER_LONG_TEXT_ID as double,\n\t\tSRC_EVENT_ID as double,\n\t\tUTC_TMP2_68 as timestamp,\n\t\tCE_DYNAMIC_LABEL_ID as double,\n\t\tNOMEN_STRING_FLAG as double,\n\t\tLAST_UTC_TS as timestamp,\n\t\tDEVICE_FREE_TXT as string,\n\t\tTRAIT_BIT_MAP as double,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as double,\n\t\tVALID_UNTIL_DT_TM as timestamp,\n\t\tVERIFIED_DT_TM as timestamp,\n\t\tVALID_FROM_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tSRC_CLINSIG_UPDT_DT_TM as timestamp,\n\t\tPERFORMED_DT_TM as timestamp,\n\t\tEXPIRATION_DT_TM as timestamp,\n\t\tEVENT_START_DT_TM as timestamp,\n\t\tEVENT_END_DT_TM as timestamp,\n\t\tCLINSIG_UPDT_DT_TM as timestamp,\n\t\tINST_ID as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> clinicalevent\nsource(output(\n\t\tPERSON_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_ID as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tACTIVE_IND as boolean,\n\t\tACTIVE_STATUS_CD as long,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCREATE_PRSNL_ID as integer,\n\t\tNAME_LAST_KEY as string,\n\t\tNAME_FIRST_KEY as string,\n\t\tPRSNL_TYPE_CD as long,\n\t\tNAME_FULL_FORMATTED as string,\n\t\tPASSWORD as string,\n\t\tEMAIL as string,\n\t\tPHYSICIAN_IND as boolean,\n\t\tPOSITION_CD as long,\n\t\tDEPARTMENT_CD as long,\n\t\tFREE_TEXT_IND as boolean,\n\t\tSECTION_CD as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tCONTRIBUTOR_SYSTEM_CD as long,\n\t\tNAME_LAST as string,\n\t\tNAME_FIRST as string,\n\t\tUSERNAME as string,\n\t\tFT_ENTITY_NAME as string,\n\t\tFT_ENTITY_ID as integer,\n\t\tPRIM_ASSIGN_LOC_CD as long,\n\t\tLOG_ACCESS_IND as boolean,\n\t\tLOG_LEVEL as integer,\n\t\tNAME_FIRST_KEY_NLS as string,\n\t\tNAME_LAST_KEY_NLS as string,\n\t\tPHYSICIAN_STATUS_CD as long,\n\t\tLOGICAL_DOMAIN_ID as integer,\n\t\tLOGICAL_DOMAIN_GRP_ID as integer,\n\t\tNAME_FIRST_KEY_A_NLS as string,\n\t\tNAME_LAST_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tEXTERNAL_IND as boolean,\n\t\tTXN_ID_TEXT as string,\n\t\tACTIVE_STATUS_DT_TM as timestamp,\n\t\tBEG_EFFECTIVE_DT_TM as timestamp,\n\t\tCREATE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> updatePrsnl\nsource(output(\n\t\tPERSON_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_ID as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tACTIVE_IND as boolean,\n\t\tACTIVE_STATUS_CD as long,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCREATE_PRSNL_ID as integer,\n\t\tNAME_LAST_KEY as string,\n\t\tNAME_FIRST_KEY as string,\n\t\tPRSNL_TYPE_CD as long,\n\t\tNAME_FULL_FORMATTED as string,\n\t\tPASSWORD as string,\n\t\tEMAIL as string,\n\t\tPHYSICIAN_IND as boolean,\n\t\tPOSITION_CD as long,\n\t\tDEPARTMENT_CD as long,\n\t\tFREE_TEXT_IND as boolean,\n\t\tSECTION_CD as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tCONTRIBUTOR_SYSTEM_CD as long,\n\t\tNAME_LAST as string,\n\t\tNAME_FIRST as string,\n\t\tUSERNAME as string,\n\t\tFT_ENTITY_NAME as string,\n\t\tFT_ENTITY_ID as integer,\n\t\tPRIM_ASSIGN_LOC_CD as long,\n\t\tLOG_ACCESS_IND as boolean,\n\t\tLOG_LEVEL as integer,\n\t\tNAME_FIRST_KEY_NLS as string,\n\t\tNAME_LAST_KEY_NLS as string,\n\t\tPHYSICIAN_STATUS_CD as long,\n\t\tLOGICAL_DOMAIN_ID as integer,\n\t\tLOGICAL_DOMAIN_GRP_ID as integer,\n\t\tNAME_FIRST_KEY_A_NLS as string,\n\t\tNAME_LAST_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tEXTERNAL_IND as boolean,\n\t\tTXN_ID_TEXT as string,\n\t\tACTIVE_STATUS_DT_TM as timestamp,\n\t\tBEG_EFFECTIVE_DT_TM as timestamp,\n\t\tCREATE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> verifiedPrsnl\nsource(output(\n\t\tPERSON_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_ID as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tACTIVE_IND as boolean,\n\t\tACTIVE_STATUS_CD as long,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCREATE_PRSNL_ID as integer,\n\t\tNAME_LAST_KEY as string,\n\t\tNAME_FIRST_KEY as string,\n\t\tPRSNL_TYPE_CD as long,\n\t\tNAME_FULL_FORMATTED as string,\n\t\tPASSWORD as string,\n\t\tEMAIL as string,\n\t\tPHYSICIAN_IND as boolean,\n\t\tPOSITION_CD as long,\n\t\tDEPARTMENT_CD as long,\n\t\tFREE_TEXT_IND as boolean,\n\t\tSECTION_CD as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tCONTRIBUTOR_SYSTEM_CD as long,\n\t\tNAME_LAST as string,\n\t\tNAME_FIRST as string,\n\t\tUSERNAME as string,\n\t\tFT_ENTITY_NAME as string,\n\t\tFT_ENTITY_ID as integer,\n\t\tPRIM_ASSIGN_LOC_CD as long,\n\t\tLOG_ACCESS_IND as boolean,\n\t\tLOG_LEVEL as integer,\n\t\tNAME_FIRST_KEY_NLS as string,\n\t\tNAME_LAST_KEY_NLS as string,\n\t\tPHYSICIAN_STATUS_CD as long,\n\t\tLOGICAL_DOMAIN_ID as integer,\n\t\tLOGICAL_DOMAIN_GRP_ID as integer,\n\t\tNAME_FIRST_KEY_A_NLS as string,\n\t\tNAME_LAST_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tEXTERNAL_IND as boolean,\n\t\tTXN_ID_TEXT as string,\n\t\tACTIVE_STATUS_DT_TM as timestamp,\n\t\tBEG_EFFECTIVE_DT_TM as timestamp,\n\t\tCREATE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> performingPrsnl\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> eventClass\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> eventClassDesc\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resultUnit\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resultTimeUnit\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resultStatus\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> contributorSystem\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> entryMode\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resultSource\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> normalcy\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> normalcyMethod\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> eventRelationship\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> recordStatus\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resourceGroup\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resource\nclinicalevent, SelectUpdatePrsnl join(UPDT_ID == UPDATE_PERSON_ID,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> cePrsnlUpdatePersonnel\ncePrsnlUpdatePersonnel, SelectPerformingPrsnl join(PERFORMED_PRSNL_ID == PERFORMING_PERSON_ID,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> cePrsnlPerformingPersonnel\ncePrsnlVerifiedPersonnel, SelectEventClass join(EVENT_CD == CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEventCode\neventClass filter(CODE_SET == 72 && ACTIVE_IND) ~> eventClassFilter\neventClassDesc filter(CODE_SET == 53 && ACTIVE_IND) ~> eventClassDescFilter\neventClassDescFilter select(mapColumn(\n\t\tCODE_VALUE,\n\t\tDESCRIPTION\n\t)) ~> SelectEventClassDesc\nceEventCode, SelectEventClassDesc join(EVENT_CLASS_CD == SelectEventClassDesc@CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEventClassDesc\nceResource select(mapColumn(\n\t\tCLINICAL_EVENT_ID,\n\t\tCerner_Encounter_ID = ENCNTR_ID,\n\t\tCerner_Patient_ID = PERSON_ID,\n\t\tCerner_ENCNTR_FINANCIAL_ID = ENCNTR_FINANCIAL_ID,\n\t\tEVENT_ID,\n\t\tEVENT_TITLE_TEXT,\n\t\tVIEW_LEVEL,\n\t\tORDER_ID,\n\t\tCATALOG_CD,\n\t\tACCESSION_NBR,\n\t\tCONTRIBUTOR_SYSTEM_CD,\n\t\tPARENT_EVENT_ID,\n\t\tEVENT_RELTN_CD,\n\t\tEVENT_CLASS_CD,\n\t\tEVENT_CD,\n\t\tEVENT_TAG,\n\t\tEVENT_END_DT_TM_OS,\n\t\tRESULT_VAL,\n\t\tRESULT_UNITS_CD,\n\t\tRESULT_TIME_UNITS_CD,\n\t\tTASK_ASSAY_CD,\n\t\tRECORD_STATUS_CD,\n\t\tRESULT_STATUS_CD,\n\t\tAUTHENTIC_FLAG,\n\t\tPUBLISH_FLAG,\n\t\tQC_REVIEW_CD,\n\t\tNORMALCY_CD,\n\t\tNORMALCY_METHOD_CD,\n\t\tRESOURCE_GROUP_CD,\n\t\tRESOURCE_CD,\n\t\tSUBTABLE_BIT_MAP,\n\t\tCOLLATING_SEQ,\n\t\tVERIFIED_PRSNL_ID,\n\t\tPERFORMED_PRSNL_ID,\n\t\tce_UPDT_ID = UPDT_ID,\n\t\tce_UPDT_TASK = UPDT_TASK,\n\t\tce_UPDT_CNT = UPDT_CNT,\n\t\tce_UPDT_APPLCTX = UPDT_APPLCTX,\n\t\tNORMAL_LOW,\n\t\tNORMAL_HIGH,\n\t\tCRITICAL_LOW,\n\t\tCRITICAL_HIGH,\n\t\tEVENT_TAG_SET_FLAG,\n\t\tNOTE_IMPORTANCE_BIT_MAP,\n\t\tORDER_ACTION_SEQUENCE,\n\t\tENTRY_MODE_CD,\n\t\tSOURCE_CD,\n\t\tCLINICAL_SEQ,\n\t\tEVENT_END_TZ,\n\t\tEVENT_START_TZ,\n\t\tPERFORMED_TZ,\n\t\tVERIFIED_TZ,\n\t\tTASK_ASSAY_VERSION_NBR,\n\t\tMODIFIER_LONG_TEXT_ID,\n\t\tSRC_EVENT_ID,\n\t\tCE_DYNAMIC_LABEL_ID,\n\t\tNOMEN_STRING_FLAG,\n\t\tce_LAST_UTC_TS = LAST_UTC_TS,\n\t\tDEVICE_FREE_TXT,\n\t\tTRAIT_BIT_MAP,\n\t\tVALID_UNTIL_DT_TM,\n\t\tVERIFIED_DT_TM,\n\t\tVALID_FROM_DT_TM,\n\t\tce_UPDT_DT_TM = UPDT_DT_TM,\n\t\tSRC_CLINSIG_UPDT_DT_TM,\n\t\tPERFORMED_DT_TM,\n\t\tEXPIRATION_DT_TM,\n\t\tEVENT_START_DT_TM,\n\t\tEVENT_END_DT_TM,\n\t\tCLINSIG_UPDT_DT_TM,\n\t\tUPDATE_PERSONNEL,\n\t\tVERIFIED_PERSONNEL,\n\t\tPERFORMING_PERSONNEL,\n\t\tDISPLAY_EVENT = DISPLAY,\n\t\tCODE_VALUE = SelectEventClassDesc@CODE_VALUE,\n\t\tDESCRIPTION = SelectEventClassDesc@DESCRIPTION,\n\t\tRESULT_UNIT_DISPLAY,\n\t\tRESULT_TIME_UNIT_DISPLAY,\n\t\tRESULT_STATUS_DISPLAY,\n\t\tCONTRIBUTOR_SYSTEM_DISPLAY,\n\t\tENTRY_MODE_DISPLAY = EVENT_ENTRY_MODE_DISPLAY,\n\t\tRESULT_SOURCE_DISPLAY,\n\t\tNORMALCY_DISPLAY,\n\t\tNORMALCY_METHOD_DISPLAY,\n\t\tEVENT_RELATIONSHIP_DISPLAY,\n\t\tRECORD_STATUS_DISPLAY,\n\t\tRESOURCE_GROUP_DISPLAY,\n\t\tRESOURCE_DISPLAY\n\t)) ~> MainSelect\neventClassFilter select(mapColumn(\n\t\tCODE_VALUE,\n\t\tCODE_SET,\n\t\tCDF_MEANING,\n\t\tDISPLAY,\n\t\tDISPLAY_KEY,\n\t\tDESCRIPTION,\n\t\tDEFINITION\n\t)) ~> SelectEventClass\nverifiedPrsnl select(mapColumn(\n\t\tVERIFIED_PERSON_ID = PERSON_ID,\n\t\tVERIFIED_PERSONNEL = NAME_FULL_FORMATTED\n\t)) ~> SelectVerifiedPrsnl\nupdatePrsnl select(mapColumn(\n\t\tUPDATE_PERSON_ID = PERSON_ID,\n\t\tUPDATE_PERSONNEL = NAME_FULL_FORMATTED\n\t)) ~> SelectUpdatePrsnl\nperformingPrsnl select(mapColumn(\n\t\tPERFORMING_PERSON_ID = PERSON_ID,\n\t\tPERFORMING_PERSONNEL = NAME_FULL_FORMATTED\n\t)) ~> SelectPerformingPrsnl\ncePrsnlPerformingPersonnel, SelectVerifiedPrsnl join(VERIFIED_PRSNL_ID == VERIFIED_PERSON_ID,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> cePrsnlVerifiedPersonnel\nresultUnit filter(CODE_SET == 54 && ACTIVE_IND) ~> resultUnitFilter\nresultUnitFilter select(mapColumn(\n\t\tRESULT_UNIT_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_UNIT_DISPLAY = DISPLAY\n\t)) ~> SelectResultUnit\nceEventClassDesc, SelectResultUnit join(RESULT_UNITS_CD == RESULT_UNIT_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultUnit\nresultTimeUnit filter(CODE_SET == 54 && ACTIVE_IND) ~> resultTimeUnitFilter\nresultTimeUnitFilter select(mapColumn(\n\t\tRESULT_TIME_UNIT_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_TIME_UNIT_DISPLAY = DISPLAY\n\t)) ~> SelectResultTimeUnit\nceResultUnit, SelectResultTimeUnit join(RESULT_TIME_UNITS_CD == RESULT_TIME_UNIT_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultTimeUnit\nresultStatus filter(CODE_SET == 8 && ACTIVE_IND) ~> resultStatusFilter\nresultStatusFilter select(mapColumn(\n\t\tRESULT_STATUS_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_STATUS_DISPLAY = DISPLAY\n\t)) ~> SelectResultStatus\nceResultTimeUnit, SelectResultStatus join(RESULT_STATUS_CD == RESULT_STATUS_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultStatus\ncontributorSystem filter(CODE_SET == 89 && ACTIVE_IND) ~> contributorSystemFilter\ncontributorSystemFilter select(mapColumn(\n\t\tCONTRIBUTOR_SYSTEM_CODE_VALUE = CODE_VALUE,\n\t\tCONTRIBUTOR_SYSTEM_DISPLAY = DISPLAY\n\t)) ~> SelectContributorSystem\nceResultStatus, SelectContributorSystem join(CONTRIBUTOR_SYSTEM_CD == CONTRIBUTOR_SYSTEM_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceContributorSystem\nentryMode filter(CODE_SET == 29520 && ACTIVE_IND) ~> entryModeFilter\nentryModeFilter select(mapColumn(\n\t\tEVENT_ENTRY_MODE_CODE_VALUE = CODE_VALUE,\n\t\tEVENT_ENTRY_MODE_DISPLAY = DISPLAY\n\t)) ~> SelectEntryMode\nceContributorSystem, SelectEntryMode join(ENTRY_MODE_CD == EVENT_ENTRY_MODE_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEntryMode\nresultSource filter(CODE_SET == 30200 && ACTIVE_IND) ~> resultSourceFilter\nresultSourceFilter select(mapColumn(\n\t\tRESULT_SOURCE_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_SOURCE_DISPLAY = DISPLAY\n\t)) ~> SelectResultSource\nceEntryMode, SelectResultSource join(SOURCE_CD == RESULT_SOURCE_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultSource\nnormalcy filter(CODE_SET == 52 && ACTIVE_IND) ~> normalcyFilter\nnormalcyFilter select(mapColumn(\n\t\tNORMALCY_CODE_VALUE = CODE_VALUE,\n\t\tNORMALCY_DISPLAY = DISPLAY\n\t)) ~> SelectNormalcy\nceResultSource, SelectNormalcy join(NORMALCY_CD == NORMALCY_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceNormalcy\nnormalcyMethod filter(CODE_SET == 50 && ACTIVE_IND) ~> normalcyMethodFilter\nnormalcyMethodFilter select(mapColumn(\n\t\tNORMALCY_METHOD_CODE_VALUE = CODE_VALUE,\n\t\tNORMALCY_METHOD_DISPLAY = DISPLAY\n\t)) ~> SelectNormalcyMethod\nceNormalcy, SelectNormalcyMethod join(NORMALCY_METHOD_CD == NORMALCY_METHOD_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceNormalcyMethod\neventRelationship filter(CODE_SET == 24 && ACTIVE_IND) ~> eventRelationshipFilter\neventRelationshipFilter select(mapColumn(\n\t\tEVENT_RELATIONSHIP_CODE_VALUE = CODE_VALUE,\n\t\tEVENT_RELATIONSHIP_DISPLAY = DISPLAY\n\t)) ~> SelectEventRelationship\nceNormalcyMethod, SelectEventRelationship join(EVENT_RELTN_CD == EVENT_RELATIONSHIP_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEventRelationship\nrecordStatus filter(CODE_SET == 48 && ACTIVE_IND) ~> recordStatusFilter\nrecordStatusFilter select(mapColumn(\n\t\tRECORD_STATUS_CODE_VALUE = CODE_VALUE,\n\t\tRECORD_STATUS_DISPLAY = DISPLAY\n\t)) ~> SelectRecordStatus\nceEventRelationship, SelectRecordStatus join(RECORD_STATUS_CD == RECORD_STATUS_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceRecordStatus\nresourceGroup filter(CODE_SET == 221 && ACTIVE_IND) ~> resourceGroupFilter\nresourceGroupFilter select(mapColumn(\n\t\tRESOURCE_GROUP_CODE_VALUE = CODE_VALUE,\n\t\tRESOURCE_GROUP_DISPLAY = DISPLAY\n\t)) ~> SelectResourceGroup\nceRecordStatus, SelectResourceGroup join(RESOURCE_GROUP_CD == RESOURCE_GROUP_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResourceGroup\nresource filter(CODE_SET == 221 && ACTIVE_IND) ~> resourceFilter\nresourceFilter select(mapColumn(\n\t\tRESOURCE_CODE_VALUE = CODE_VALUE,\n\t\tRESOURCE_DISPLAY = DISPLAY\n\t)) ~> SelectResource\nceResourceGroup, SelectResource join(RESOURCE_CD == RESOURCE_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResource\nMainSelect sink(allowSchemaDrift: true,\n\tvalidateSchema: true) ~> VitalsSink"
+					"script": "\n\nsource(output(\n\t\tCLINICAL_EVENT_ID as double,\n\t\tENCNTR_ID as double,\n\t\tPERSON_ID as double,\n\t\tUTC_TMP2_4 as timestamp,\n\t\tENCNTR_FINANCIAL_ID as double,\n\t\tEVENT_ID as double,\n\t\tUTC_TMP2_7 as timestamp,\n\t\tEVENT_TITLE_TEXT as string,\n\t\tVIEW_LEVEL as double,\n\t\tORDER_ID as double,\n\t\tCATALOG_CD as double,\n\t\tSERIES_REF_NBR as string,\n\t\tACCESSION_NBR as string,\n\t\tCONTRIBUTOR_SYSTEM_CD as double,\n\t\tREFERENCE_NBR as string,\n\t\tPARENT_EVENT_ID as double,\n\t\tEVENT_RELTN_CD as double,\n\t\tUTC_TMP2_18 as timestamp,\n\t\tEVENT_CLASS_CD as double,\n\t\tEVENT_CD as double,\n\t\tEVENT_TAG as string,\n\t\tUTC_TMP2_22 as timestamp,\n\t\tEVENT_END_DT_TM_OS as double,\n\t\tRESULT_VAL as string,\n\t\tRESULT_UNITS_CD as double,\n\t\tRESULT_TIME_UNITS_CD as double,\n\t\tTASK_ASSAY_CD as double,\n\t\tRECORD_STATUS_CD as double,\n\t\tRESULT_STATUS_CD as double,\n\t\tAUTHENTIC_FLAG as double,\n\t\tPUBLISH_FLAG as double,\n\t\tQC_REVIEW_CD as double,\n\t\tNORMALCY_CD as double,\n\t\tNORMALCY_METHOD_CD as double,\n\t\tINQUIRE_SECURITY_CD as double,\n\t\tRESOURCE_GROUP_CD as double,\n\t\tRESOURCE_CD as double,\n\t\tSUBTABLE_BIT_MAP as double,\n\t\tCOLLATING_SEQ as string,\n\t\tUTC_TMP2_40 as timestamp,\n\t\tVERIFIED_PRSNL_ID as double,\n\t\tUTC_TMP2_42 as timestamp,\n\t\tPERFORMED_PRSNL_ID as double,\n\t\tUTC_TMP2_44 as timestamp,\n\t\tUPDT_ID as double,\n\t\tUPDT_TASK as double,\n\t\tUPDT_CNT as double,\n\t\tUPDT_APPLCTX as double,\n\t\tNORMAL_LOW as string,\n\t\tNORMAL_HIGH as string,\n\t\tCRITICAL_LOW as string,\n\t\tCRITICAL_HIGH as string,\n\t\tUTC_TMP2_53 as timestamp,\n\t\tEVENT_TAG_SET_FLAG as double,\n\t\tNOTE_IMPORTANCE_BIT_MAP as double,\n\t\tUTC_TMP2_56 as timestamp,\n\t\tORDER_ACTION_SEQUENCE as double,\n\t\tENTRY_MODE_CD as double,\n\t\tSOURCE_CD as double,\n\t\tCLINICAL_SEQ as string,\n\t\tEVENT_END_TZ as double,\n\t\tEVENT_START_TZ as double,\n\t\tPERFORMED_TZ as double,\n\t\tVERIFIED_TZ as double,\n\t\tTASK_ASSAY_VERSION_NBR as double,\n\t\tMODIFIER_LONG_TEXT_ID as double,\n\t\tSRC_EVENT_ID as double,\n\t\tUTC_TMP2_68 as timestamp,\n\t\tCE_DYNAMIC_LABEL_ID as double,\n\t\tNOMEN_STRING_FLAG as double,\n\t\tLAST_UTC_TS as timestamp,\n\t\tDEVICE_FREE_TXT as string,\n\t\tTRAIT_BIT_MAP as double,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as double,\n\t\tVALID_UNTIL_DT_TM as timestamp,\n\t\tVERIFIED_DT_TM as timestamp,\n\t\tVALID_FROM_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tSRC_CLINSIG_UPDT_DT_TM as timestamp,\n\t\tPERFORMED_DT_TM as timestamp,\n\t\tEXPIRATION_DT_TM as timestamp,\n\t\tEVENT_START_DT_TM as timestamp,\n\t\tEVENT_END_DT_TM as timestamp,\n\t\tCLINSIG_UPDT_DT_TM as timestamp,\n\t\tINST_ID as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> clinicalevent\nsource(output(\n\t\tPERSON_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_ID as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tACTIVE_IND as boolean,\n\t\tACTIVE_STATUS_CD as long,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCREATE_PRSNL_ID as integer,\n\t\tNAME_LAST_KEY as string,\n\t\tNAME_FIRST_KEY as string,\n\t\tPRSNL_TYPE_CD as long,\n\t\tNAME_FULL_FORMATTED as string,\n\t\tPASSWORD as string,\n\t\tEMAIL as string,\n\t\tPHYSICIAN_IND as boolean,\n\t\tPOSITION_CD as long,\n\t\tDEPARTMENT_CD as long,\n\t\tFREE_TEXT_IND as boolean,\n\t\tSECTION_CD as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tCONTRIBUTOR_SYSTEM_CD as long,\n\t\tNAME_LAST as string,\n\t\tNAME_FIRST as string,\n\t\tUSERNAME as string,\n\t\tFT_ENTITY_NAME as string,\n\t\tFT_ENTITY_ID as integer,\n\t\tPRIM_ASSIGN_LOC_CD as long,\n\t\tLOG_ACCESS_IND as boolean,\n\t\tLOG_LEVEL as integer,\n\t\tNAME_FIRST_KEY_NLS as string,\n\t\tNAME_LAST_KEY_NLS as string,\n\t\tPHYSICIAN_STATUS_CD as long,\n\t\tLOGICAL_DOMAIN_ID as integer,\n\t\tLOGICAL_DOMAIN_GRP_ID as integer,\n\t\tNAME_FIRST_KEY_A_NLS as string,\n\t\tNAME_LAST_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tEXTERNAL_IND as boolean,\n\t\tTXN_ID_TEXT as string,\n\t\tACTIVE_STATUS_DT_TM as timestamp,\n\t\tBEG_EFFECTIVE_DT_TM as timestamp,\n\t\tCREATE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinferDriftedColumnTypes: true) ~> updatePrsnl\nsource(output(\n\t\tPERSON_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_ID as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tACTIVE_IND as boolean,\n\t\tACTIVE_STATUS_CD as long,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCREATE_PRSNL_ID as integer,\n\t\tNAME_LAST_KEY as string,\n\t\tNAME_FIRST_KEY as string,\n\t\tPRSNL_TYPE_CD as long,\n\t\tNAME_FULL_FORMATTED as string,\n\t\tPASSWORD as string,\n\t\tEMAIL as string,\n\t\tPHYSICIAN_IND as boolean,\n\t\tPOSITION_CD as long,\n\t\tDEPARTMENT_CD as long,\n\t\tFREE_TEXT_IND as boolean,\n\t\tSECTION_CD as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tCONTRIBUTOR_SYSTEM_CD as long,\n\t\tNAME_LAST as string,\n\t\tNAME_FIRST as string,\n\t\tUSERNAME as string,\n\t\tFT_ENTITY_NAME as string,\n\t\tFT_ENTITY_ID as integer,\n\t\tPRIM_ASSIGN_LOC_CD as long,\n\t\tLOG_ACCESS_IND as boolean,\n\t\tLOG_LEVEL as integer,\n\t\tNAME_FIRST_KEY_NLS as string,\n\t\tNAME_LAST_KEY_NLS as string,\n\t\tPHYSICIAN_STATUS_CD as long,\n\t\tLOGICAL_DOMAIN_ID as integer,\n\t\tLOGICAL_DOMAIN_GRP_ID as integer,\n\t\tNAME_FIRST_KEY_A_NLS as string,\n\t\tNAME_LAST_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tEXTERNAL_IND as boolean,\n\t\tTXN_ID_TEXT as string,\n\t\tACTIVE_STATUS_DT_TM as timestamp,\n\t\tBEG_EFFECTIVE_DT_TM as timestamp,\n\t\tCREATE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinferDriftedColumnTypes: true) ~> verifiedPrsnl\nsource(output(\n\t\tPERSON_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_ID as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tACTIVE_IND as boolean,\n\t\tACTIVE_STATUS_CD as long,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCREATE_PRSNL_ID as integer,\n\t\tNAME_LAST_KEY as string,\n\t\tNAME_FIRST_KEY as string,\n\t\tPRSNL_TYPE_CD as long,\n\t\tNAME_FULL_FORMATTED as string,\n\t\tPASSWORD as string,\n\t\tEMAIL as string,\n\t\tPHYSICIAN_IND as boolean,\n\t\tPOSITION_CD as long,\n\t\tDEPARTMENT_CD as long,\n\t\tFREE_TEXT_IND as boolean,\n\t\tSECTION_CD as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tCONTRIBUTOR_SYSTEM_CD as long,\n\t\tNAME_LAST as string,\n\t\tNAME_FIRST as string,\n\t\tUSERNAME as string,\n\t\tFT_ENTITY_NAME as string,\n\t\tFT_ENTITY_ID as integer,\n\t\tPRIM_ASSIGN_LOC_CD as long,\n\t\tLOG_ACCESS_IND as boolean,\n\t\tLOG_LEVEL as integer,\n\t\tNAME_FIRST_KEY_NLS as string,\n\t\tNAME_LAST_KEY_NLS as string,\n\t\tPHYSICIAN_STATUS_CD as long,\n\t\tLOGICAL_DOMAIN_ID as integer,\n\t\tLOGICAL_DOMAIN_GRP_ID as integer,\n\t\tNAME_FIRST_KEY_A_NLS as string,\n\t\tNAME_LAST_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tEXTERNAL_IND as boolean,\n\t\tTXN_ID_TEXT as string,\n\t\tACTIVE_STATUS_DT_TM as timestamp,\n\t\tBEG_EFFECTIVE_DT_TM as timestamp,\n\t\tCREATE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: true,\n\tinferDriftedColumnTypes: true) ~> performingPrsnl\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> eventClass\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> eventClassDesc\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resultUnit\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resultTimeUnit\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resultStatus\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> contributorSystem\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> entryMode\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resultSource\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> normalcy\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> normalcyMethod\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> eventRelationship\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> recordStatus\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resourceGroup\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: true) ~> resource\nclinicalevent, SelectUpdatePrsnl join(UPDT_ID == UPDATE_PERSON_ID,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> cePrsnlUpdatePersonnel\ncePrsnlUpdatePersonnel, SelectPerformingPrsnl join(PERFORMED_PRSNL_ID == PERFORMING_PERSON_ID,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> cePrsnlPerformingPersonnel\ncePrsnlVerifiedPersonnel, SelectEventClass join(EVENT_CD == CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEventCode\neventClass filter(CODE_SET == 72 && ACTIVE_IND) ~> eventClassFilter\neventClassDesc filter(CODE_SET == 53 && ACTIVE_IND) ~> eventClassDescFilter\neventClassDescFilter select(mapColumn(\n\t\tCODE_VALUE,\n\t\tDESCRIPTION\n\t)) ~> SelectEventClassDesc\nceEventCode, SelectEventClassDesc join(EVENT_CLASS_CD == SelectEventClassDesc@CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEventClassDesc\nceResource select(mapColumn(\n\t\tCLINICAL_EVENT_ID,\n\t\tCerner_Encounter_ID = ENCNTR_ID,\n\t\tCerner_Patient_ID = PERSON_ID,\n\t\tCerner_ENCNTR_FINANCIAL_ID = ENCNTR_FINANCIAL_ID,\n\t\tEVENT_ID,\n\t\tEVENT_TITLE_TEXT,\n\t\tVIEW_LEVEL,\n\t\tORDER_ID,\n\t\tCATALOG_CD,\n\t\tACCESSION_NBR,\n\t\tCONTRIBUTOR_SYSTEM_CD,\n\t\tPARENT_EVENT_ID,\n\t\tEVENT_RELTN_CD,\n\t\tEVENT_CLASS_CD,\n\t\tEVENT_CD,\n\t\tEVENT_TAG,\n\t\tEVENT_END_DT_TM_OS,\n\t\tRESULT_VAL,\n\t\tRESULT_UNITS_CD,\n\t\tRESULT_TIME_UNITS_CD,\n\t\tTASK_ASSAY_CD,\n\t\tRECORD_STATUS_CD,\n\t\tRESULT_STATUS_CD,\n\t\tAUTHENTIC_FLAG,\n\t\tPUBLISH_FLAG,\n\t\tQC_REVIEW_CD,\n\t\tNORMALCY_CD,\n\t\tNORMALCY_METHOD_CD,\n\t\tRESOURCE_GROUP_CD,\n\t\tRESOURCE_CD,\n\t\tSUBTABLE_BIT_MAP,\n\t\tCOLLATING_SEQ,\n\t\tVERIFIED_PRSNL_ID,\n\t\tPERFORMED_PRSNL_ID,\n\t\tce_UPDT_ID = UPDT_ID,\n\t\tce_UPDT_TASK = UPDT_TASK,\n\t\tce_UPDT_CNT = UPDT_CNT,\n\t\tce_UPDT_APPLCTX = UPDT_APPLCTX,\n\t\tNORMAL_LOW,\n\t\tNORMAL_HIGH,\n\t\tCRITICAL_LOW,\n\t\tCRITICAL_HIGH,\n\t\tEVENT_TAG_SET_FLAG,\n\t\tNOTE_IMPORTANCE_BIT_MAP,\n\t\tORDER_ACTION_SEQUENCE,\n\t\tENTRY_MODE_CD,\n\t\tSOURCE_CD,\n\t\tCLINICAL_SEQ,\n\t\tEVENT_END_TZ,\n\t\tEVENT_START_TZ,\n\t\tPERFORMED_TZ,\n\t\tVERIFIED_TZ,\n\t\tTASK_ASSAY_VERSION_NBR,\n\t\tMODIFIER_LONG_TEXT_ID,\n\t\tSRC_EVENT_ID,\n\t\tCE_DYNAMIC_LABEL_ID,\n\t\tNOMEN_STRING_FLAG,\n\t\tce_LAST_UTC_TS = LAST_UTC_TS,\n\t\tDEVICE_FREE_TXT,\n\t\tTRAIT_BIT_MAP,\n\t\tVALID_UNTIL_DT_TM,\n\t\tVERIFIED_DT_TM,\n\t\tVALID_FROM_DT_TM,\n\t\tce_UPDT_DT_TM = UPDT_DT_TM,\n\t\tSRC_CLINSIG_UPDT_DT_TM,\n\t\tPERFORMED_DT_TM,\n\t\tEXPIRATION_DT_TM,\n\t\tEVENT_START_DT_TM,\n\t\tEVENT_END_DT_TM,\n\t\tCLINSIG_UPDT_DT_TM,\n\t\tUPDATE_PERSONNEL,\n\t\tVERIFIED_PERSONNEL,\n\t\tPERFORMING_PERSONNEL,\n\t\tDISPLAY_EVENT = DISPLAY,\n\t\tCODE_VALUE = SelectEventClassDesc@CODE_VALUE,\n\t\tDESCRIPTION = SelectEventClassDesc@DESCRIPTION,\n\t\tRESULT_UNIT_DISPLAY,\n\t\tRESULT_TIME_UNIT_DISPLAY,\n\t\tRESULT_STATUS_DISPLAY,\n\t\tCONTRIBUTOR_SYSTEM_DISPLAY,\n\t\tENTRY_MODE_DISPLAY = EVENT_ENTRY_MODE_DISPLAY,\n\t\tRESULT_SOURCE_DISPLAY,\n\t\tNORMALCY_DISPLAY,\n\t\tNORMALCY_METHOD_DISPLAY,\n\t\tEVENT_RELATIONSHIP_DISPLAY,\n\t\tRECORD_STATUS_DISPLAY,\n\t\tRESOURCE_GROUP_DISPLAY,\n\t\tRESOURCE_DISPLAY\n\t)) ~> MainSelect\neventClassFilter select(mapColumn(\n\t\tCODE_VALUE,\n\t\tCODE_SET,\n\t\tCDF_MEANING,\n\t\tDISPLAY,\n\t\tDISPLAY_KEY,\n\t\tDESCRIPTION,\n\t\tDEFINITION\n\t)) ~> SelectEventClass\nverifiedPrsnl select(mapColumn(\n\t\tVERIFIED_PERSON_ID = PERSON_ID,\n\t\tVERIFIED_PERSONNEL = NAME_FULL_FORMATTED\n\t)) ~> SelectVerifiedPrsnl\nupdatePrsnl select(mapColumn(\n\t\tUPDATE_PERSON_ID = PERSON_ID,\n\t\tUPDATE_PERSONNEL = NAME_FULL_FORMATTED\n\t)) ~> SelectUpdatePrsnl\nperformingPrsnl select(mapColumn(\n\t\tPERFORMING_PERSON_ID = PERSON_ID,\n\t\tPERFORMING_PERSONNEL = NAME_FULL_FORMATTED\n\t)) ~> SelectPerformingPrsnl\ncePrsnlPerformingPersonnel, SelectVerifiedPrsnl join(VERIFIED_PRSNL_ID == VERIFIED_PERSON_ID,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> cePrsnlVerifiedPersonnel\nresultUnit filter(CODE_SET == 54 && ACTIVE_IND) ~> resultUnitFilter\nresultUnitFilter select(mapColumn(\n\t\tRESULT_UNIT_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_UNIT_DISPLAY = DISPLAY\n\t)) ~> SelectResultUnit\nceEventClassDesc, SelectResultUnit join(RESULT_UNITS_CD == RESULT_UNIT_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultUnit\nresultTimeUnit filter(CODE_SET == 54 && ACTIVE_IND) ~> resultTimeUnitFilter\nresultTimeUnitFilter select(mapColumn(\n\t\tRESULT_TIME_UNIT_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_TIME_UNIT_DISPLAY = DISPLAY\n\t)) ~> SelectResultTimeUnit\nceResultUnit, SelectResultTimeUnit join(RESULT_TIME_UNITS_CD == RESULT_TIME_UNIT_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultTimeUnit\nresultStatus filter(CODE_SET == 8 && ACTIVE_IND) ~> resultStatusFilter\nresultStatusFilter select(mapColumn(\n\t\tRESULT_STATUS_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_STATUS_DISPLAY = DISPLAY\n\t)) ~> SelectResultStatus\nceResultTimeUnit, SelectResultStatus join(RESULT_STATUS_CD == RESULT_STATUS_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultStatus\ncontributorSystem filter(CODE_SET == 89 && ACTIVE_IND) ~> contributorSystemFilter\ncontributorSystemFilter select(mapColumn(\n\t\tCONTRIBUTOR_SYSTEM_CODE_VALUE = CODE_VALUE,\n\t\tCONTRIBUTOR_SYSTEM_DISPLAY = DISPLAY\n\t)) ~> SelectContributorSystem\nceResultStatus, SelectContributorSystem join(CONTRIBUTOR_SYSTEM_CD == CONTRIBUTOR_SYSTEM_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceContributorSystem\nentryMode filter(CODE_SET == 29520 && ACTIVE_IND) ~> entryModeFilter\nentryModeFilter select(mapColumn(\n\t\tEVENT_ENTRY_MODE_CODE_VALUE = CODE_VALUE,\n\t\tEVENT_ENTRY_MODE_DISPLAY = DISPLAY\n\t)) ~> SelectEntryMode\nceContributorSystem, SelectEntryMode join(ENTRY_MODE_CD == EVENT_ENTRY_MODE_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEntryMode\nresultSource filter(CODE_SET == 30200 && ACTIVE_IND) ~> resultSourceFilter\nresultSourceFilter select(mapColumn(\n\t\tRESULT_SOURCE_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_SOURCE_DISPLAY = DISPLAY\n\t)) ~> SelectResultSource\nceEntryMode, SelectResultSource join(SOURCE_CD == RESULT_SOURCE_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultSource\nnormalcy filter(CODE_SET == 52 && ACTIVE_IND) ~> normalcyFilter\nnormalcyFilter select(mapColumn(\n\t\tNORMALCY_CODE_VALUE = CODE_VALUE,\n\t\tNORMALCY_DISPLAY = DISPLAY\n\t)) ~> SelectNormalcy\nceResultSource, SelectNormalcy join(NORMALCY_CD == NORMALCY_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceNormalcy\nnormalcyMethod filter(CODE_SET == 50 && ACTIVE_IND) ~> normalcyMethodFilter\nnormalcyMethodFilter select(mapColumn(\n\t\tNORMALCY_METHOD_CODE_VALUE = CODE_VALUE,\n\t\tNORMALCY_METHOD_DISPLAY = DISPLAY\n\t)) ~> SelectNormalcyMethod\nceNormalcy, SelectNormalcyMethod join(NORMALCY_METHOD_CD == NORMALCY_METHOD_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceNormalcyMethod\neventRelationship filter(CODE_SET == 24 && ACTIVE_IND) ~> eventRelationshipFilter\neventRelationshipFilter select(mapColumn(\n\t\tEVENT_RELATIONSHIP_CODE_VALUE = CODE_VALUE,\n\t\tEVENT_RELATIONSHIP_DISPLAY = DISPLAY\n\t)) ~> SelectEventRelationship\nceNormalcyMethod, SelectEventRelationship join(EVENT_RELTN_CD == EVENT_RELATIONSHIP_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEventRelationship\nrecordStatus filter(CODE_SET == 48 && ACTIVE_IND) ~> recordStatusFilter\nrecordStatusFilter select(mapColumn(\n\t\tRECORD_STATUS_CODE_VALUE = CODE_VALUE,\n\t\tRECORD_STATUS_DISPLAY = DISPLAY\n\t)) ~> SelectRecordStatus\nceEventRelationship, SelectRecordStatus join(RECORD_STATUS_CD == RECORD_STATUS_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceRecordStatus\nresourceGroup filter(CODE_SET == 221 && ACTIVE_IND) ~> resourceGroupFilter\nresourceGroupFilter select(mapColumn(\n\t\tRESOURCE_GROUP_CODE_VALUE = CODE_VALUE,\n\t\tRESOURCE_GROUP_DISPLAY = DISPLAY\n\t)) ~> SelectResourceGroup\nceRecordStatus, SelectResourceGroup join(RESOURCE_GROUP_CD == RESOURCE_GROUP_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResourceGroup\nresource filter(CODE_SET == 221 && ACTIVE_IND) ~> resourceFilter\nresourceFilter select(mapColumn(\n\t\tRESOURCE_CODE_VALUE = CODE_VALUE,\n\t\tRESOURCE_DISPLAY = DISPLAY\n\t)) ~> SelectResource\nceResourceGroup, SelectResource join(RESOURCE_CD == RESOURCE_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResource\nMainSelect sink(input(\n\t\tCLINICAL_EVENT_ID as double,\n\t\tCerner_Encounter_ID as double,\n\t\tCerner_Patient_ID as double,\n\t\tCerner_ENCNTR_FINANCIAL_ID as double,\n\t\tEVENT_ID as double,\n\t\tEVENT_TITLE_TEXT as string,\n\t\tVIEW_LEVEL as double,\n\t\tORDER_ID as double,\n\t\tCATALOG_CD as double,\n\t\tACCESSION_NBR as string,\n\t\tCONTRIBUTOR_SYSTEM_CD as double,\n\t\tPARENT_EVENT_ID as double,\n\t\tEVENT_RELTN_CD as double,\n\t\tEVENT_CLASS_CD as double,\n\t\tEVENT_CD as double,\n\t\tEVENT_TAG as string,\n\t\tEVENT_END_DT_TM_OS as double,\n\t\tRESULT_VAL as string,\n\t\tRESULT_UNITS_CD as double,\n\t\tRESULT_TIME_UNITS_CD as double,\n\t\tTASK_ASSAY_CD as double,\n\t\tRECORD_STATUS_CD as double,\n\t\tRESULT_STATUS_CD as double,\n\t\tAUTHENTIC_FLAG as double,\n\t\tPUBLISH_FLAG as double,\n\t\tQC_REVIEW_CD as double,\n\t\tNORMALCY_CD as double,\n\t\tNORMALCY_METHOD_CD as double,\n\t\tRESOURCE_GROUP_CD as double,\n\t\tRESOURCE_CD as double,\n\t\tSUBTABLE_BIT_MAP as double,\n\t\tCOLLATING_SEQ as string,\n\t\tVERIFIED_PRSNL_ID as double,\n\t\tPERFORMED_PRSNL_ID as double,\n\t\tce_UPDT_ID as double,\n\t\tce_UPDT_TASK as double,\n\t\tce_UPDT_CNT as double,\n\t\tce_UPDT_APPLCTX as double,\n\t\tNORMAL_LOW as string,\n\t\tNORMAL_HIGH as string,\n\t\tCRITICAL_LOW as string,\n\t\tCRITICAL_HIGH as string,\n\t\tEVENT_TAG_SET_FLAG as double,\n\t\tNOTE_IMPORTANCE_BIT_MAP as double,\n\t\tORDER_ACTION_SEQUENCE as double,\n\t\tENTRY_MODE_CD as double,\n\t\tSOURCE_CD as double,\n\t\tCLINICAL_SEQ as string,\n\t\tEVENT_END_TZ as double,\n\t\tEVENT_START_TZ as double,\n\t\tPERFORMED_TZ as double,\n\t\tVERIFIED_TZ as double,\n\t\tTASK_ASSAY_VERSION_NBR as double,\n\t\tMODIFIER_LONG_TEXT_ID as double,\n\t\tSRC_EVENT_ID as double,\n\t\tCE_DYNAMIC_LABEL_ID as double,\n\t\tNOMEN_STRING_FLAG as double,\n\t\tce_LAST_UTC_TS as timestamp,\n\t\tDEVICE_FREE_TXT as string,\n\t\tTRAIT_BIT_MAP as double,\n\t\tVALID_UNTIL_DT_TM as timestamp,\n\t\tVERIFIED_DT_TM as timestamp,\n\t\tVALID_FROM_DT_TM as timestamp,\n\t\tce_UPDT_DT_TM as timestamp,\n\t\tSRC_CLINSIG_UPDT_DT_TM as timestamp,\n\t\tPERFORMED_DT_TM as timestamp,\n\t\tEXPIRATION_DT_TM as timestamp,\n\t\tEVENT_START_DT_TM as timestamp,\n\t\tEVENT_END_DT_TM as timestamp,\n\t\tCLINSIG_UPDT_DT_TM as timestamp,\n\t\tUPDATE_PERSONNEL as string,\n\t\tVERIFIED_PERSONNEL as string,\n\t\tPERFORMING_PERSONNEL as string,\n\t\tDISPLAY_EVENT as string,\n\t\tCODE_VALUE as long,\n\t\tDESCRIPTION as string,\n\t\tRESULT_UNIT_DISPLAY as string,\n\t\tRESULT_TIME_UNIT_DISPLAY as string,\n\t\tRESULT_STATUS_DISPLAY as string,\n\t\tCONTRIBUTOR_SYSTEM_DISPLAY as string,\n\t\tENTRY_MODE_DISPLAY as string,\n\t\tRESULT_SOURCE_DISPLAY as string,\n\t\tNORMALCY_DISPLAY as string,\n\t\tNORMALCY_METHOD_DISPLAY as string,\n\t\tEVENT_RELATIONSHIP_DISPLAY as string,\n\t\tRECORD_STATUS_DISPLAY as string,\n\t\tRESOURCE_GROUP_DISPLAY as string,\n\t\tRESOURCE_DISPLAY as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: true) ~> VitalsSink"
 				}
 			},
 			"dependsOn": [

@@ -1006,6 +1006,61 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/TestVitalsQuery')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "VitalsQuery",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "VitalsQuery",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"clinicalevent": {},
+									"updatePrsnl": {},
+									"verifiedPrsnl": {},
+									"performingPrsnl": {},
+									"eventClass": {},
+									"eventClassDesc": {},
+									"resultUnit": {},
+									"resultTimeUnit": {},
+									"resultStatus": {},
+									"contributorSystem": {},
+									"entryMode": {},
+									"resultSource": {},
+									"normalcy": {},
+									"normalcyMethod": {},
+									"eventRelationship": {},
+									"recordStatus": {},
+									"resourceGroup": {},
+									"resource": {},
+									"VitalsSink": {}
+								}
+							},
+							"staging": {}
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/VitalsQuery')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/VitalsQueryPipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -2733,10 +2788,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"folderPath": {
-							"value": "V500_PRSNL",
-							"type": "Expression"
-						},
+						"folderPath": "V500_PRSNL",
 						"container": "staginglz"
 					},
 					"compressionCodec": "snappy"
@@ -2744,39 +2796,51 @@
 				"schema": [
 					{
 						"name": "PERSON_ID",
-						"type": "INT32"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "UPDT_CNT",
-						"type": "INT32"
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_3",
+						"type": "INT96"
 					},
 					{
 						"name": "UPDT_ID",
-						"type": "INT32"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "UPDT_TASK",
-						"type": "INT32"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "UPDT_APPLCTX",
-						"type": "INT64"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "ACTIVE_IND",
-						"type": "BOOLEAN"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "ACTIVE_STATUS_CD",
-						"type": "INT64"
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_9",
+						"type": "INT96"
 					},
 					{
 						"name": "ACTIVE_STATUS_PRSNL_ID",
-						"type": "INT32"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "CREATE_PRSNL_ID",
-						"type": "INT32"
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_12",
+						"type": "INT96"
 					},
 					{
 						"name": "NAME_LAST_KEY",
@@ -2788,7 +2852,7 @@
 					},
 					{
 						"name": "PRSNL_TYPE_CD",
-						"type": "INT64"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "NAME_FULL_FORMATTED",
@@ -2804,35 +2868,47 @@
 					},
 					{
 						"name": "PHYSICIAN_IND",
-						"type": "BOOLEAN"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "POSITION_CD",
-						"type": "INT64"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "DEPARTMENT_CD",
-						"type": "INT64"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "FREE_TEXT_IND",
-						"type": "BOOLEAN"
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_23",
+						"type": "INT96"
+					},
+					{
+						"name": "UTC_TMP2_24",
+						"type": "INT96"
 					},
 					{
 						"name": "SECTION_CD",
-						"type": "INT64"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "DATA_STATUS_CD",
-						"type": "INT64"
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_27",
+						"type": "INT96"
 					},
 					{
 						"name": "DATA_STATUS_PRSNL_ID",
-						"type": "INT32"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "CONTRIBUTOR_SYSTEM_CD",
-						"type": "INT64"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "NAME_LAST",
@@ -2852,19 +2928,19 @@
 					},
 					{
 						"name": "FT_ENTITY_ID",
-						"type": "INT32"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "PRIM_ASSIGN_LOC_CD",
-						"type": "INT64"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "LOG_ACCESS_IND",
-						"type": "BOOLEAN"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "LOG_LEVEL",
-						"type": "INT32"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "NAME_FIRST_KEY_NLS",
@@ -2876,15 +2952,15 @@
 					},
 					{
 						"name": "PHYSICIAN_STATUS_CD",
-						"type": "INT64"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "LOGICAL_DOMAIN_ID",
-						"type": "INT32"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "LOGICAL_DOMAIN_GRP_ID",
-						"type": "INT32"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "NAME_FIRST_KEY_A_NLS",
@@ -2900,7 +2976,7 @@
 					},
 					{
 						"name": "EXTERNAL_IND",
-						"type": "BOOLEAN"
+						"type": "DOUBLE"
 					},
 					{
 						"name": "TXN_ID_TEXT",
@@ -2932,11 +3008,7 @@
 					},
 					{
 						"name": "INST_ID",
-						"type": "INT32"
-					},
-					{
-						"name": "DW_Refresh_DT_TM",
-						"type": "INT96"
+						"type": "DOUBLE"
 					}
 				]
 			},
@@ -3314,8 +3386,7 @@
 						"frequency": "Day",
 						"interval": 1,
 						"startTime": "2019-09-12T05:00:00.000Z",
-						"timeZone": "UTC",
-						"schedule": {}
+						"timeZone": "UTC"
 					}
 				}
 			},

@@ -1426,6 +1426,61 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/TestVitalsQuery')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "VitalsQuery",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "VitalsQuery",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"clinicalevent": {},
+									"updatePrsnl": {},
+									"verifiedPrsnl": {},
+									"performingPrsnl": {},
+									"eventClass": {},
+									"eventClassDesc": {},
+									"resultUnit": {},
+									"resultTimeUnit": {},
+									"resultStatus": {},
+									"contributorSystem": {},
+									"entryMode": {},
+									"resultSource": {},
+									"normalcy": {},
+									"normalcyMethod": {},
+									"eventRelationship": {},
+									"recordStatus": {},
+									"resourceGroup": {},
+									"resource": {},
+									"VitalsSink": {}
+								}
+							},
+							"staging": {}
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/VitalsQuery')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/VitalsQueryPipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1764,8 +1819,7 @@
 						"frequency": "Day",
 						"interval": 1,
 						"startTime": "2019-09-12T05:00:00.000Z",
-						"timeZone": "UTC",
-						"schedule": {}
+						"timeZone": "UTC"
 					}
 				}
 			},

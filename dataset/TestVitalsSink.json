@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "part-00000-tid-3733944440982517493-2a752f87-7d19-41e8-8a15-e9f5e756dabb-221-1-c000.snappy.parquet",
 				"folderPath": "vitals",
 				"container": "destinationlz"
 			},

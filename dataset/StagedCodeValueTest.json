@@ -1,0 +1,150 @@
+{
+	"name": "StagedCodeValueTest",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "V500_CODE_VALUE",
+				"container": "staginglz"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "CODE_VALUE",
+				"type": "INT64"
+			},
+			{
+				"name": "CODE_SET",
+				"type": "INT32"
+			},
+			{
+				"name": "CDF_MEANING",
+				"type": "UTF8"
+			},
+			{
+				"name": "DISPLAY",
+				"type": "UTF8"
+			},
+			{
+				"name": "DISPLAY_KEY",
+				"type": "UTF8"
+			},
+			{
+				"name": "DESCRIPTION",
+				"type": "UTF8"
+			},
+			{
+				"name": "DEFINITION",
+				"type": "UTF8"
+			},
+			{
+				"name": "COLLATION_SEQ",
+				"type": "INT32"
+			},
+			{
+				"name": "ACTIVE_TYPE_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "ACTIVE_IND",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "UPDT_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_CNT",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_TASK",
+				"type": "INT32"
+			},
+			{
+				"name": "UPDT_APPLCTX",
+				"type": "INT64"
+			},
+			{
+				"name": "DATA_STATUS_CD",
+				"type": "INT64"
+			},
+			{
+				"name": "DATA_STATUS_PRSNL_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "ACTIVE_STATUS_PRSNL_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "CKI",
+				"type": "UTF8"
+			},
+			{
+				"name": "DISPLAY_KEY_NLS",
+				"type": "UTF8"
+			},
+			{
+				"name": "CONCEPT_CKI",
+				"type": "UTF8"
+			},
+			{
+				"name": "DISPLAY_KEY_A_NLS",
+				"type": "UTF8"
+			},
+			{
+				"name": "LAST_UTC_TS",
+				"type": "INT96"
+			},
+			{
+				"name": "TXN_ID_TEXT",
+				"type": "UTF8"
+			},
+			{
+				"name": "CLU_SUBKEY1_FLAG",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "ACTIVE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "BEGIN_EFFECTIVE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "DATA_STATUS_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "UPDT_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "INACTIVE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "END_EFFECTIVE_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "INST_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "DW_Refresh_DT_TM",
+				"type": "INT96"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

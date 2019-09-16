@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "data_d14d9914-ff12-4754-9ff3-fb87f39e4b64_d3af8ef0-5139-4717-9c0b-47347d664e6a.parquet",
 				"folderPath": "V500_PRSNL",
 				"container": "staginglz"
 			},

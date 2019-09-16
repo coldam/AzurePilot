@@ -124,20 +124,14 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "PlaceholderSourceTable",
+									"referenceName": "PlaceholderI2b2MetadataTable",
 									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
 								{
 									"referenceName": "StagingData",
-									"type": "DatasetReference",
-									"parameters": {
-										"TableName": {
-											"value": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
-											"type": "Expression"
-										}
-									}
+									"type": "DatasetReference"
 								}
 							]
 						},

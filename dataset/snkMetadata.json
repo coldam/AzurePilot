@@ -1,0 +1,12 @@
+{
+	"name": "snkMetadata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "I2B2MetaDataLink",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}

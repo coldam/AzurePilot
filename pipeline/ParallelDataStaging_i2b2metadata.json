@@ -132,7 +132,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"TableName": {
-											"value": "@{replace(item().tableName, ' ','')}",
+											"value": "@item().tableName",
 											"type": "Expression"
 										}
 									}

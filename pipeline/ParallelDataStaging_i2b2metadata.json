@@ -131,7 +131,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"TableName": {
-											"value": "@dataset().tableName",
+											"value": "@dataset.tableName()",
 											"type": "Expression"
 										}
 									}

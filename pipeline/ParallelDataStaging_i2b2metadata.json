@@ -108,7 +108,11 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "SqlServerSource"
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@item().srcQuery",
+										"type": "Expression"
+									}
 								},
 								"sink": {
 									"type": "AzureSqlSink"

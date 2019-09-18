@@ -115,8 +115,10 @@
 									}
 								},
 								"sink": {
-									"type": "AzureSqlSink",
-									"tableOption": "autoCreate"
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									}
 								},
 								"enableStaging": false
 							},
@@ -128,11 +130,11 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "snkMetadata",
+									"referenceName": "StagingData",
 									"type": "DatasetReference",
 									"parameters": {
 										"TableName": {
-											"value": "@item().tableName",
+											"value": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
 											"type": "Expression"
 										}
 									}

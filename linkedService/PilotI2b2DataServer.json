@@ -1,0 +1,21 @@
+{
+	"name": "PilotI2b2DataServer",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "PilotAzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "piloti2b2dataconstr"
+			}
+		},
+		"connectVia": {
+			"referenceName": "pilotIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

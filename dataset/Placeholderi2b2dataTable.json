@@ -1,0 +1,16 @@
+{
+	"name": "Placeholderi2b2dataTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotI2b2DataServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "I2B2Data",
+			"table": "placeholder"
+		}
+	}
+}

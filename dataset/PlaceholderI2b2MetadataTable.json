@@ -1,0 +1,16 @@
+{
+	"name": "PlaceholderI2b2MetadataTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotI2b2MetadataServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "I2B2Metadata",
+			"table": "placeholder"
+		}
+	}
+}

@@ -1,0 +1,121 @@
+{
+	"name": "I2B2Metadata_I2B2_VISIT_LOCATION",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "I2B2Metadata_I2B2_VISIT_LOCATION",
+				"container": "staginglz"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "C_Hlevel",
+				"type": "INT32"
+			},
+			{
+				"name": "C_Fullname",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Synonym_CD",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Visualattributes",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Totalnum",
+				"type": "INT32"
+			},
+			{
+				"name": "C_Basecode",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Metadataxml",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Facttablecolumn",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Tablename",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Columnname",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Columndatatype",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Operator",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Dimcode",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Comment",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Tooltip",
+				"type": "UTF8"
+			},
+			{
+				"name": "M_Applied_Path",
+				"type": "UTF8"
+			},
+			{
+				"name": "Update_Date",
+				"type": "INT96"
+			},
+			{
+				"name": "Download_Date",
+				"type": "INT96"
+			},
+			{
+				"name": "Import_Date",
+				"type": "INT96"
+			},
+			{
+				"name": "Sourcesystem_CD",
+				"type": "UTF8"
+			},
+			{
+				"name": "Valuetype_CD",
+				"type": "UTF8"
+			},
+			{
+				"name": "M_Exclusion_CD",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Path",
+				"type": "UTF8"
+			},
+			{
+				"name": "C_Symbol",
+				"type": "UTF8"
+			}
+		]
+	}
+}

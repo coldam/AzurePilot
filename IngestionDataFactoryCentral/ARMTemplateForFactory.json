@@ -7,6 +7,10 @@
 			"metadata": "Data Factory Name",
 			"defaultValue": "IngestionDataFactoryCentral"
 		},
+		"I2B2MetaDataLink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'I2B2MetaDataLink'"
+		},
 		"PocOdbcProd2_credential": {
 			"type": "secureString",
 			"metadata": "Secure string for 'credential' of 'PocOdbcProd2'"
@@ -22,6 +26,18 @@
 		"PilotBlobStorage_properties_typeProperties_connectionString_secretName": {
 			"type": "string",
 			"defaultValue": "pilotblobstorageconnectionstring"
+		},
+		"PilotI2b2DataDIDServer_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "piloti2b2datadidconstr"
+		},
+		"PilotI2b2DataServer_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "piloti2b2dataconstr"
+		},
+		"PilotI2b2MetadataServer_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "piloti2b2metadataconstr"
 		},
 		"PilotOracleSource_properties_typeProperties_connectionString_secretName": {
 			"type": "string",
@@ -1006,6 +1022,810 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ParallelDataStaging_i2b2DIDdata')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ListofSourceTables",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'I2B2DataDID'"
+							},
+							"dataset": {
+								"referenceName": "SourceTableList",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ParallelDataCopy",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "ListofSourceTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('ListofSourceTables').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "LogExecutionStart",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionStart]",
+										"storedProcedureParameters": {
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStartTime": {
+												"value": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@item().stageTableID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Stage Data",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "LogExecutionStart",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "@item().srcQuery",
+												"type": "Expression"
+											}
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "PlaceholderI2b2DataDIDTable",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "StagingData",
+											"type": "DatasetReference",
+											"parameters": {
+												"TableName": {
+													"value": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "SuccessSP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Success",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Failure SP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Failure",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceTableList')]",
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureSqlDatabase')]",
+				"[concat(variables('factoryId'), '/datasets/PlaceholderI2b2DataDIDTable')]",
+				"[concat(variables('factoryId'), '/datasets/StagingData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParallelDataStaging_i2b2data')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ListofSourceTables",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'I2B2Data'"
+							},
+							"dataset": {
+								"referenceName": "SourceTableList",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ParallelDataCopy",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "ListofSourceTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('ListofSourceTables').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "LogExecutionStart",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionStart]",
+										"storedProcedureParameters": {
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStartTime": {
+												"value": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@item().stageTableID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Stage Data",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "LogExecutionStart",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "@item().srcQuery",
+												"type": "Expression"
+											}
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "Placeholderi2b2dataTable",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "StagingData",
+											"type": "DatasetReference",
+											"parameters": {
+												"TableName": {
+													"value": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "SuccessSP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Success",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Failure SP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Failure",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceTableList')]",
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureSqlDatabase')]",
+				"[concat(variables('factoryId'), '/datasets/Placeholderi2b2dataTable')]",
+				"[concat(variables('factoryId'), '/datasets/StagingData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParallelDataStaging_i2b2metadata')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ListofSourceTables",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'I2B2Metadata'"
+							},
+							"dataset": {
+								"referenceName": "SourceTableList",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ParallelDataCopy",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "ListofSourceTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('ListofSourceTables').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "LogExecutionStart",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionStart]",
+										"storedProcedureParameters": {
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStartTime": {
+												"value": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@item().stageTableID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Stage Data",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "LogExecutionStart",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "SqlServerSource",
+											"sqlReaderQuery": {
+												"value": "@item().srcQuery",
+												"type": "Expression"
+											}
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "PlaceholderI2b2MetadataTable",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "StagingData",
+											"type": "DatasetReference",
+											"parameters": {
+												"TableName": {
+													"value": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "SuccessSP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Success",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Failure SP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Failure",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SourceTableList')]",
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureSqlDatabase')]",
+				"[concat(variables('factoryId'), '/datasets/PlaceholderI2b2MetadataTable')]",
+				"[concat(variables('factoryId'), '/datasets/StagingData')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/VitalsQueryPipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1323,6 +2143,61 @@
 				"[concat(variables('factoryId'), '/linkedServices/PilotAzureSqlDatabase')]",
 				"[concat(variables('factoryId'), '/datasets/ParallelDataStagingOracle')]",
 				"[concat(variables('factoryId'), '/datasets/StagingData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VitalsQueryPipelineTest')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "VitalsQuery",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "VitalsQueryTest",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"clinicalevent": {},
+									"updatePrsnl": {},
+									"verifiedPrsnl": {},
+									"performingPrsnl": {},
+									"eventClass": {},
+									"eventClassDesc": {},
+									"resultUnit": {},
+									"resultTimeUnit": {},
+									"resultStatus": {},
+									"contributorSystem": {},
+									"entryMode": {},
+									"resultSource": {},
+									"normalcy": {},
+									"normalcyMethod": {},
+									"eventRelationship": {},
+									"recordStatus": {},
+									"resourceGroup": {},
+									"resource": {},
+									"VitalsSink": {}
+								}
+							},
+							"staging": {}
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/VitalsQueryTest')]"
 			]
 		},
 		{
@@ -2087,6 +2962,48 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/PlaceholderI2b2DataDIDTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotI2b2DataDIDServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "I2B2DataDID",
+					"table": "placeholder"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotI2b2DataDIDServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PlaceholderI2b2MetadataTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotI2b2MetadataServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "I2B2Metadata",
+					"table": "placeholder"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotI2b2MetadataServer')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PlaceholderSourceTable')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2105,6 +3022,27 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/PilotSqlServer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Placeholderi2b2dataTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotI2b2DataServer",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "I2B2Data",
+					"table": "placeholder"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotI2b2DataServer')]"
 			]
 		},
 		{
@@ -2194,6 +3132,379 @@
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/StagedClinicalEvent')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "V500_CLINICAL_EVENT/@{formatDateTime(utcnow(),'yyyy-MM-dd')}",
+							"type": "Expression"
+						},
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CLINICAL_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENCNTR_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERSON_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_4",
+						"type": "INT96"
+					},
+					{
+						"name": "ENCNTR_FINANCIAL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_7",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_TITLE_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "VIEW_LEVEL",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ORDER_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CATALOG_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SERIES_REF_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "ACCESSION_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "REFERENCE_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "PARENT_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_RELTN_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_18",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_CLASS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_TAG",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_22",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_END_DT_TM_OS",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_VAL",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_TIME_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RECORD_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "AUTHENTIC_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PUBLISH_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "QC_REVIEW_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_METHOD_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "INQUIRE_SECURITY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_GROUP_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SUBTABLE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "COLLATING_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_40",
+						"type": "INT96"
+					},
+					{
+						"name": "VERIFIED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_42",
+						"type": "INT96"
+					},
+					{
+						"name": "PERFORMED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_44",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "NORMAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_53",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_TAG_SET_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOTE_IMPORTANCE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_56",
+						"type": "INT96"
+					},
+					{
+						"name": "ORDER_ACTION_SEQUENCE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENTRY_MODE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CLINICAL_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "EVENT_END_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_START_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERFORMED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VERIFIED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_VERSION_NBR",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "MODIFIER_LONG_TEXT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SRC_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_68",
+						"type": "INT96"
+					},
+					{
+						"name": "CE_DYNAMIC_LABEL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOMEN_STRING_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT96"
+					},
+					{
+						"name": "DEVICE_FREE_TXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "TRAIT_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "CLU_SUBKEY1_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VALID_UNTIL_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "VERIFIED_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "VALID_FROM_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "SRC_CLINSIG_UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "PERFORMED_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EXPIRATION_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_START_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_END_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "CLINSIG_UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StagedClinicalEventTest')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2720,7 +4031,403 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/StagedCodeValueTest')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "V500_CODE_VALUE",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CODE_VALUE",
+						"type": "INT64"
+					},
+					{
+						"name": "CODE_SET",
+						"type": "INT32"
+					},
+					{
+						"name": "CDF_MEANING",
+						"type": "UTF8"
+					},
+					{
+						"name": "DISPLAY",
+						"type": "UTF8"
+					},
+					{
+						"name": "DISPLAY_KEY",
+						"type": "UTF8"
+					},
+					{
+						"name": "DESCRIPTION",
+						"type": "UTF8"
+					},
+					{
+						"name": "DEFINITION",
+						"type": "UTF8"
+					},
+					{
+						"name": "COLLATION_SEQ",
+						"type": "INT32"
+					},
+					{
+						"name": "ACTIVE_TYPE_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "ACTIVE_IND",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "INT32"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "INT64"
+					},
+					{
+						"name": "DATA_STATUS_CD",
+						"type": "INT64"
+					},
+					{
+						"name": "DATA_STATUS_PRSNL_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "ACTIVE_STATUS_PRSNL_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "CKI",
+						"type": "UTF8"
+					},
+					{
+						"name": "DISPLAY_KEY_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "CONCEPT_CKI",
+						"type": "UTF8"
+					},
+					{
+						"name": "DISPLAY_KEY_A_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT96"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "CLU_SUBKEY1_FLAG",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "ACTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "BEGIN_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "DATA_STATUS_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INACTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "END_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "INT32"
+					},
+					{
+						"name": "DW_Refresh_DT_TM",
+						"type": "INT96"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/StagedPrsnl')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "V500_PRSNL",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "PERSON_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_3",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ACTIVE_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ACTIVE_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_9",
+						"type": "INT96"
+					},
+					{
+						"name": "ACTIVE_STATUS_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CREATE_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_12",
+						"type": "INT96"
+					},
+					{
+						"name": "NAME_LAST_KEY",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_FIRST_KEY",
+						"type": "UTF8"
+					},
+					{
+						"name": "PRSNL_TYPE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NAME_FULL_FORMATTED",
+						"type": "UTF8"
+					},
+					{
+						"name": "PASSWORD",
+						"type": "UTF8"
+					},
+					{
+						"name": "EMAIL",
+						"type": "UTF8"
+					},
+					{
+						"name": "PHYSICIAN_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "POSITION_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "DEPARTMENT_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "FREE_TEXT_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_23",
+						"type": "INT96"
+					},
+					{
+						"name": "UTC_TMP2_24",
+						"type": "INT96"
+					},
+					{
+						"name": "SECTION_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "DATA_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_27",
+						"type": "INT96"
+					},
+					{
+						"name": "DATA_STATUS_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NAME_LAST",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_FIRST",
+						"type": "UTF8"
+					},
+					{
+						"name": "USERNAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "FT_ENTITY_NAME",
+						"type": "UTF8"
+					},
+					{
+						"name": "FT_ENTITY_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PRIM_ASSIGN_LOC_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LOG_ACCESS_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LOG_LEVEL",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NAME_FIRST_KEY_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_LAST_KEY_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "PHYSICIAN_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LOGICAL_DOMAIN_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LOGICAL_DOMAIN_GRP_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NAME_FIRST_KEY_A_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "NAME_LAST_KEY_A_NLS",
+						"type": "UTF8"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT96"
+					},
+					{
+						"name": "EXTERNAL_IND",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "ACTIVE_STATUS_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "BEG_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "CREATE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "DATA_STATUS_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "END_EFFECTIVE_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StagedPrsnlTest')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -3157,6 +4864,73 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/VitalsSinkTest')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "vitals",
+						"container": "destinationlz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/snkMetadata')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "I2B2MetaDataLink",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "I2B2Metadata",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/I2B2MetaDataLink')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/I2B2MetaDataLink')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('I2B2MetaDataLink_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PilotAzureKeyVault')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -3210,6 +4984,87 @@
 				}
 			},
 			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PilotI2b2DataDIDServer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "PilotAzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('PilotI2b2DataDIDServer_properties_typeProperties_connectionString_secretName')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "pilotIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/pilotIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PilotI2b2DataServer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "PilotAzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('PilotI2b2DataServer_properties_typeProperties_connectionString_secretName')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "pilotIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/pilotIntegrationRuntime')]",
+				"[concat(variables('factoryId'), '/linkedServices/PilotAzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PilotI2b2MetadataServer')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "PilotAzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "[parameters('PilotI2b2MetadataServer_properties_typeProperties_connectionString_secretName')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "pilotIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/pilotIntegrationRuntime')]",
 				"[concat(variables('factoryId'), '/linkedServices/PilotAzureKeyVault')]"
 			]
 		},
@@ -3725,6 +5580,328 @@
 				"[concat(variables('factoryId'), '/datasets/StagedClinicalEvent')]",
 				"[concat(variables('factoryId'), '/datasets/StagedPrsnl')]",
 				"[concat(variables('factoryId'), '/datasets/StagedCodeValue')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VitalsQueryTest')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Query to combine tables into the Vitals dataset\n",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "StagedClinicalEventTest",
+								"type": "DatasetReference"
+							},
+							"name": "clinicalevent",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedPrsnlTest",
+								"type": "DatasetReference"
+							},
+							"name": "updatePrsnl",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedPrsnlTest",
+								"type": "DatasetReference"
+							},
+							"name": "verifiedPrsnl",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedPrsnlTest",
+								"type": "DatasetReference"
+							},
+							"name": "performingPrsnl",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "eventClass",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "eventClassDesc",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "resultUnit",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "resultTimeUnit",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "resultStatus",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "contributorSystem",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "entryMode",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "resultSource",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "normalcy",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "normalcyMethod",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "eventRelationship",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "recordStatus",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "resourceGroup",
+							"typeProperties": {}
+						},
+						{
+							"dataset": {
+								"referenceName": "StagedCodeValueTest",
+								"type": "DatasetReference"
+							},
+							"name": "resource",
+							"typeProperties": {}
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "VitalsSinkTest",
+								"type": "DatasetReference"
+							},
+							"name": "VitalsSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "cePrsnlUpdatePersonnel"
+						},
+						{
+							"name": "cePrsnlPerformingPersonnel"
+						},
+						{
+							"name": "ceEventCode"
+						},
+						{
+							"name": "eventClassFilter"
+						},
+						{
+							"name": "eventClassDescFilter"
+						},
+						{
+							"name": "SelectEventClassDesc"
+						},
+						{
+							"name": "ceEventClassDesc"
+						},
+						{
+							"name": "MainSelect"
+						},
+						{
+							"name": "SelectEventClass"
+						},
+						{
+							"name": "SelectVerifiedPrsnl"
+						},
+						{
+							"name": "SelectUpdatePrsnl"
+						},
+						{
+							"name": "SelectPerformingPrsnl"
+						},
+						{
+							"name": "cePrsnlVerifiedPersonnel"
+						},
+						{
+							"name": "resultUnitFilter"
+						},
+						{
+							"name": "SelectResultUnit"
+						},
+						{
+							"name": "ceResultUnit"
+						},
+						{
+							"name": "resultTimeUnitFilter"
+						},
+						{
+							"name": "SelectResultTimeUnit"
+						},
+						{
+							"name": "ceResultTimeUnit"
+						},
+						{
+							"name": "resultStatusFilter"
+						},
+						{
+							"name": "SelectResultStatus"
+						},
+						{
+							"name": "ceResultStatus"
+						},
+						{
+							"name": "contributorSystemFilter"
+						},
+						{
+							"name": "SelectContributorSystem"
+						},
+						{
+							"name": "ceContributorSystem"
+						},
+						{
+							"name": "entryModeFilter"
+						},
+						{
+							"name": "SelectEntryMode"
+						},
+						{
+							"name": "ceEntryMode"
+						},
+						{
+							"name": "resultSourceFilter"
+						},
+						{
+							"name": "SelectResultSource"
+						},
+						{
+							"name": "ceResultSource"
+						},
+						{
+							"name": "normalcyFilter"
+						},
+						{
+							"name": "SelectNormalcy"
+						},
+						{
+							"name": "ceNormalcy"
+						},
+						{
+							"name": "normalcyMethodFilter"
+						},
+						{
+							"name": "SelectNormalcyMethod"
+						},
+						{
+							"name": "ceNormalcyMethod"
+						},
+						{
+							"name": "eventRelationshipFilter"
+						},
+						{
+							"name": "SelectEventRelationship"
+						},
+						{
+							"name": "ceEventRelationship"
+						},
+						{
+							"name": "recordStatusFilter"
+						},
+						{
+							"name": "SelectRecordStatus"
+						},
+						{
+							"name": "ceRecordStatus"
+						},
+						{
+							"name": "resourceGroupFilter"
+						},
+						{
+							"name": "SelectResourceGroup"
+						},
+						{
+							"name": "ceResourceGroup"
+						},
+						{
+							"name": "resourceFilter"
+						},
+						{
+							"name": "SelectResource"
+						},
+						{
+							"name": "ceResource"
+						}
+					],
+					"script": "\n\nsource(output(\n\t\tCLINICAL_EVENT_ID as double,\n\t\tENCNTR_ID as double,\n\t\tPERSON_ID as double,\n\t\tUTC_TMP2_4 as timestamp,\n\t\tENCNTR_FINANCIAL_ID as double,\n\t\tEVENT_ID as double,\n\t\tUTC_TMP2_7 as timestamp,\n\t\tEVENT_TITLE_TEXT as string,\n\t\tVIEW_LEVEL as double,\n\t\tORDER_ID as double,\n\t\tCATALOG_CD as double,\n\t\tSERIES_REF_NBR as string,\n\t\tACCESSION_NBR as string,\n\t\tCONTRIBUTOR_SYSTEM_CD as double,\n\t\tREFERENCE_NBR as string,\n\t\tPARENT_EVENT_ID as double,\n\t\tEVENT_RELTN_CD as double,\n\t\tUTC_TMP2_18 as timestamp,\n\t\tEVENT_CLASS_CD as double,\n\t\tEVENT_CD as double,\n\t\tEVENT_TAG as string,\n\t\tUTC_TMP2_22 as timestamp,\n\t\tEVENT_END_DT_TM_OS as double,\n\t\tRESULT_VAL as string,\n\t\tRESULT_UNITS_CD as double,\n\t\tRESULT_TIME_UNITS_CD as double,\n\t\tTASK_ASSAY_CD as double,\n\t\tRECORD_STATUS_CD as double,\n\t\tRESULT_STATUS_CD as double,\n\t\tAUTHENTIC_FLAG as double,\n\t\tPUBLISH_FLAG as double,\n\t\tQC_REVIEW_CD as double,\n\t\tNORMALCY_CD as double,\n\t\tNORMALCY_METHOD_CD as double,\n\t\tINQUIRE_SECURITY_CD as double,\n\t\tRESOURCE_GROUP_CD as double,\n\t\tRESOURCE_CD as double,\n\t\tSUBTABLE_BIT_MAP as double,\n\t\tCOLLATING_SEQ as string,\n\t\tUTC_TMP2_40 as timestamp,\n\t\tVERIFIED_PRSNL_ID as double,\n\t\tUTC_TMP2_42 as timestamp,\n\t\tPERFORMED_PRSNL_ID as double,\n\t\tUTC_TMP2_44 as timestamp,\n\t\tUPDT_ID as double,\n\t\tUPDT_TASK as double,\n\t\tUPDT_CNT as double,\n\t\tUPDT_APPLCTX as double,\n\t\tNORMAL_LOW as string,\n\t\tNORMAL_HIGH as string,\n\t\tCRITICAL_LOW as string,\n\t\tCRITICAL_HIGH as string,\n\t\tUTC_TMP2_53 as timestamp,\n\t\tEVENT_TAG_SET_FLAG as double,\n\t\tNOTE_IMPORTANCE_BIT_MAP as double,\n\t\tUTC_TMP2_56 as timestamp,\n\t\tORDER_ACTION_SEQUENCE as double,\n\t\tENTRY_MODE_CD as double,\n\t\tSOURCE_CD as double,\n\t\tCLINICAL_SEQ as string,\n\t\tEVENT_END_TZ as double,\n\t\tEVENT_START_TZ as double,\n\t\tPERFORMED_TZ as double,\n\t\tVERIFIED_TZ as double,\n\t\tTASK_ASSAY_VERSION_NBR as double,\n\t\tMODIFIER_LONG_TEXT_ID as double,\n\t\tSRC_EVENT_ID as double,\n\t\tUTC_TMP2_68 as timestamp,\n\t\tCE_DYNAMIC_LABEL_ID as double,\n\t\tNOMEN_STRING_FLAG as double,\n\t\tLAST_UTC_TS as timestamp,\n\t\tDEVICE_FREE_TXT as string,\n\t\tTRAIT_BIT_MAP as double,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as double,\n\t\tVALID_UNTIL_DT_TM as timestamp,\n\t\tVERIFIED_DT_TM as timestamp,\n\t\tVALID_FROM_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tSRC_CLINSIG_UPDT_DT_TM as timestamp,\n\t\tPERFORMED_DT_TM as timestamp,\n\t\tEXPIRATION_DT_TM as timestamp,\n\t\tEVENT_START_DT_TM as timestamp,\n\t\tEVENT_END_DT_TM as timestamp,\n\t\tCLINSIG_UPDT_DT_TM as timestamp,\n\t\tINST_ID as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> clinicalevent\nsource(output(\n\t\tPERSON_ID as double,\n\t\tUPDT_CNT as double,\n\t\tUTC_TMP2_3 as timestamp,\n\t\tUPDT_ID as double,\n\t\tUPDT_TASK as double,\n\t\tUPDT_APPLCTX as double,\n\t\tACTIVE_IND as double,\n\t\tACTIVE_STATUS_CD as double,\n\t\tUTC_TMP2_9 as timestamp,\n\t\tACTIVE_STATUS_PRSNL_ID as double,\n\t\tCREATE_PRSNL_ID as double,\n\t\tUTC_TMP2_12 as timestamp,\n\t\tNAME_LAST_KEY as string,\n\t\tNAME_FIRST_KEY as string,\n\t\tPRSNL_TYPE_CD as double,\n\t\tNAME_FULL_FORMATTED as string,\n\t\tPASSWORD as string,\n\t\tEMAIL as string,\n\t\tPHYSICIAN_IND as double,\n\t\tPOSITION_CD as double,\n\t\tDEPARTMENT_CD as double,\n\t\tFREE_TEXT_IND as double,\n\t\tUTC_TMP2_23 as timestamp,\n\t\tUTC_TMP2_24 as timestamp,\n\t\tSECTION_CD as double,\n\t\tDATA_STATUS_CD as double,\n\t\tUTC_TMP2_27 as timestamp,\n\t\tDATA_STATUS_PRSNL_ID as double,\n\t\tCONTRIBUTOR_SYSTEM_CD as double,\n\t\tNAME_LAST as string,\n\t\tNAME_FIRST as string,\n\t\tUSERNAME as string,\n\t\tFT_ENTITY_NAME as string,\n\t\tFT_ENTITY_ID as double,\n\t\tPRIM_ASSIGN_LOC_CD as double,\n\t\tLOG_ACCESS_IND as double,\n\t\tLOG_LEVEL as double,\n\t\tNAME_FIRST_KEY_NLS as string,\n\t\tNAME_LAST_KEY_NLS as string,\n\t\tPHYSICIAN_STATUS_CD as double,\n\t\tLOGICAL_DOMAIN_ID as double,\n\t\tLOGICAL_DOMAIN_GRP_ID as double,\n\t\tNAME_FIRST_KEY_A_NLS as string,\n\t\tNAME_LAST_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tEXTERNAL_IND as double,\n\t\tTXN_ID_TEXT as string,\n\t\tACTIVE_STATUS_DT_TM as timestamp,\n\t\tBEG_EFFECTIVE_DT_TM as timestamp,\n\t\tCREATE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> updatePrsnl\nsource(output(\n\t\tPERSON_ID as double,\n\t\tUPDT_CNT as double,\n\t\tUTC_TMP2_3 as timestamp,\n\t\tUPDT_ID as double,\n\t\tUPDT_TASK as double,\n\t\tUPDT_APPLCTX as double,\n\t\tACTIVE_IND as double,\n\t\tACTIVE_STATUS_CD as double,\n\t\tUTC_TMP2_9 as timestamp,\n\t\tACTIVE_STATUS_PRSNL_ID as double,\n\t\tCREATE_PRSNL_ID as double,\n\t\tUTC_TMP2_12 as timestamp,\n\t\tNAME_LAST_KEY as string,\n\t\tNAME_FIRST_KEY as string,\n\t\tPRSNL_TYPE_CD as double,\n\t\tNAME_FULL_FORMATTED as string,\n\t\tPASSWORD as string,\n\t\tEMAIL as string,\n\t\tPHYSICIAN_IND as double,\n\t\tPOSITION_CD as double,\n\t\tDEPARTMENT_CD as double,\n\t\tFREE_TEXT_IND as double,\n\t\tUTC_TMP2_23 as timestamp,\n\t\tUTC_TMP2_24 as timestamp,\n\t\tSECTION_CD as double,\n\t\tDATA_STATUS_CD as double,\n\t\tUTC_TMP2_27 as timestamp,\n\t\tDATA_STATUS_PRSNL_ID as double,\n\t\tCONTRIBUTOR_SYSTEM_CD as double,\n\t\tNAME_LAST as string,\n\t\tNAME_FIRST as string,\n\t\tUSERNAME as string,\n\t\tFT_ENTITY_NAME as string,\n\t\tFT_ENTITY_ID as double,\n\t\tPRIM_ASSIGN_LOC_CD as double,\n\t\tLOG_ACCESS_IND as double,\n\t\tLOG_LEVEL as double,\n\t\tNAME_FIRST_KEY_NLS as string,\n\t\tNAME_LAST_KEY_NLS as string,\n\t\tPHYSICIAN_STATUS_CD as double,\n\t\tLOGICAL_DOMAIN_ID as double,\n\t\tLOGICAL_DOMAIN_GRP_ID as double,\n\t\tNAME_FIRST_KEY_A_NLS as string,\n\t\tNAME_LAST_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tEXTERNAL_IND as double,\n\t\tTXN_ID_TEXT as string,\n\t\tACTIVE_STATUS_DT_TM as timestamp,\n\t\tBEG_EFFECTIVE_DT_TM as timestamp,\n\t\tCREATE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> verifiedPrsnl\nsource(output(\n\t\tPERSON_ID as double,\n\t\tUPDT_CNT as double,\n\t\tUTC_TMP2_3 as timestamp,\n\t\tUPDT_ID as double,\n\t\tUPDT_TASK as double,\n\t\tUPDT_APPLCTX as double,\n\t\tACTIVE_IND as double,\n\t\tACTIVE_STATUS_CD as double,\n\t\tUTC_TMP2_9 as timestamp,\n\t\tACTIVE_STATUS_PRSNL_ID as double,\n\t\tCREATE_PRSNL_ID as double,\n\t\tUTC_TMP2_12 as timestamp,\n\t\tNAME_LAST_KEY as string,\n\t\tNAME_FIRST_KEY as string,\n\t\tPRSNL_TYPE_CD as double,\n\t\tNAME_FULL_FORMATTED as string,\n\t\tPASSWORD as string,\n\t\tEMAIL as string,\n\t\tPHYSICIAN_IND as double,\n\t\tPOSITION_CD as double,\n\t\tDEPARTMENT_CD as double,\n\t\tFREE_TEXT_IND as double,\n\t\tUTC_TMP2_23 as timestamp,\n\t\tUTC_TMP2_24 as timestamp,\n\t\tSECTION_CD as double,\n\t\tDATA_STATUS_CD as double,\n\t\tUTC_TMP2_27 as timestamp,\n\t\tDATA_STATUS_PRSNL_ID as double,\n\t\tCONTRIBUTOR_SYSTEM_CD as double,\n\t\tNAME_LAST as string,\n\t\tNAME_FIRST as string,\n\t\tUSERNAME as string,\n\t\tFT_ENTITY_NAME as string,\n\t\tFT_ENTITY_ID as double,\n\t\tPRIM_ASSIGN_LOC_CD as double,\n\t\tLOG_ACCESS_IND as double,\n\t\tLOG_LEVEL as double,\n\t\tNAME_FIRST_KEY_NLS as string,\n\t\tNAME_LAST_KEY_NLS as string,\n\t\tPHYSICIAN_STATUS_CD as double,\n\t\tLOGICAL_DOMAIN_ID as double,\n\t\tLOGICAL_DOMAIN_GRP_ID as double,\n\t\tNAME_FIRST_KEY_A_NLS as string,\n\t\tNAME_LAST_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tEXTERNAL_IND as double,\n\t\tTXN_ID_TEXT as string,\n\t\tACTIVE_STATUS_DT_TM as timestamp,\n\t\tBEG_EFFECTIVE_DT_TM as timestamp,\n\t\tCREATE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> performingPrsnl\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> eventClass\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> eventClassDesc\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> resultUnit\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> resultTimeUnit\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> resultStatus\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> contributorSystem\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> entryMode\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> resultSource\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> normalcy\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> normalcyMethod\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> eventRelationship\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> recordStatus\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> resourceGroup\nsource(output(\n\t\tCODE_VALUE as long,\n\t\tCODE_SET as integer,\n\t\tCDF_MEANING as string,\n\t\tDISPLAY as string,\n\t\tDISPLAY_KEY as string,\n\t\tDESCRIPTION as string,\n\t\tDEFINITION as string,\n\t\tCOLLATION_SEQ as integer,\n\t\tACTIVE_TYPE_CD as long,\n\t\tACTIVE_IND as boolean,\n\t\tUPDT_ID as integer,\n\t\tUPDT_CNT as integer,\n\t\tUPDT_TASK as integer,\n\t\tUPDT_APPLCTX as long,\n\t\tDATA_STATUS_CD as long,\n\t\tDATA_STATUS_PRSNL_ID as integer,\n\t\tACTIVE_STATUS_PRSNL_ID as integer,\n\t\tCKI as string,\n\t\tDISPLAY_KEY_NLS as string,\n\t\tCONCEPT_CKI as string,\n\t\tDISPLAY_KEY_A_NLS as string,\n\t\tLAST_UTC_TS as timestamp,\n\t\tTXN_ID_TEXT as string,\n\t\tCLU_SUBKEY1_FLAG as boolean,\n\t\tACTIVE_DT_TM as timestamp,\n\t\tBEGIN_EFFECTIVE_DT_TM as timestamp,\n\t\tDATA_STATUS_DT_TM as timestamp,\n\t\tUPDT_DT_TM as timestamp,\n\t\tINACTIVE_DT_TM as timestamp,\n\t\tEND_EFFECTIVE_DT_TM as timestamp,\n\t\tINST_ID as integer,\n\t\tDW_Refresh_DT_TM as timestamp\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false) ~> resource\nclinicalevent, SelectUpdatePrsnl join(PERSON_ID == UPDATE_PERSON_ID,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> cePrsnlUpdatePersonnel\ncePrsnlUpdatePersonnel, SelectPerformingPrsnl join(PERFORMED_PRSNL_ID == PERFORMING_PERSON_ID,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> cePrsnlPerformingPersonnel\ncePrsnlVerifiedPersonnel, SelectEventClass join(EVENT_CD == CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEventCode\neventClass filter(CODE_SET == 72 && ACTIVE_IND) ~> eventClassFilter\neventClassDesc filter(CODE_SET == 53 && ACTIVE_IND) ~> eventClassDescFilter\neventClassDescFilter select(mapColumn(\n\t\tCODE_VALUE,\n\t\tDESCRIPTION\n\t)) ~> SelectEventClassDesc\nceEventCode, SelectEventClassDesc join(EVENT_CLASS_CD == SelectEventClassDesc@CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEventClassDesc\nceResource select(mapColumn(\n\t\tCLINICAL_EVENT_ID,\n\t\tCerner_Encounter_ID = ENCNTR_ID,\n\t\tCerner_Patient_ID = PERSON_ID,\n\t\tCerner_ENCNTR_FINANCIAL_ID = ENCNTR_FINANCIAL_ID,\n\t\tEVENT_ID,\n\t\tEVENT_TITLE_TEXT,\n\t\tVIEW_LEVEL,\n\t\tORDER_ID,\n\t\tCATALOG_CD,\n\t\tACCESSION_NBR,\n\t\tCONTRIBUTOR_SYSTEM_CD,\n\t\tPARENT_EVENT_ID,\n\t\tEVENT_RELTN_CD,\n\t\tEVENT_CLASS_CD,\n\t\tEVENT_CD,\n\t\tEVENT_TAG,\n\t\tEVENT_END_DT_TM_OS,\n\t\tRESULT_VAL,\n\t\tRESULT_UNITS_CD,\n\t\tRESULT_TIME_UNITS_CD,\n\t\tTASK_ASSAY_CD,\n\t\tRECORD_STATUS_CD,\n\t\tRESULT_STATUS_CD,\n\t\tAUTHENTIC_FLAG,\n\t\tPUBLISH_FLAG,\n\t\tQC_REVIEW_CD,\n\t\tNORMALCY_CD,\n\t\tNORMALCY_METHOD_CD,\n\t\tRESOURCE_GROUP_CD,\n\t\tRESOURCE_CD,\n\t\tSUBTABLE_BIT_MAP,\n\t\tCOLLATING_SEQ,\n\t\tVERIFIED_PRSNL_ID,\n\t\tPERFORMED_PRSNL_ID,\n\t\tce_UPDT_ID = UPDT_ID,\n\t\tce_UPDT_TASK = UPDT_TASK,\n\t\tce_UPDT_CNT = UPDT_CNT,\n\t\tce_UPDT_APPLCTX = UPDT_APPLCTX,\n\t\tNORMAL_LOW,\n\t\tNORMAL_HIGH,\n\t\tCRITICAL_LOW,\n\t\tCRITICAL_HIGH,\n\t\tEVENT_TAG_SET_FLAG,\n\t\tNOTE_IMPORTANCE_BIT_MAP,\n\t\tORDER_ACTION_SEQUENCE,\n\t\tENTRY_MODE_CD,\n\t\tSOURCE_CD,\n\t\tCLINICAL_SEQ,\n\t\tEVENT_END_TZ,\n\t\tEVENT_START_TZ,\n\t\tPERFORMED_TZ,\n\t\tVERIFIED_TZ,\n\t\tTASK_ASSAY_VERSION_NBR,\n\t\tMODIFIER_LONG_TEXT_ID,\n\t\tSRC_EVENT_ID,\n\t\tCE_DYNAMIC_LABEL_ID,\n\t\tNOMEN_STRING_FLAG,\n\t\tce_LAST_UTC_TS = LAST_UTC_TS,\n\t\tDEVICE_FREE_TXT,\n\t\tTRAIT_BIT_MAP,\n\t\tVALID_UNTIL_DT_TM,\n\t\tVERIFIED_DT_TM,\n\t\tVALID_FROM_DT_TM,\n\t\tce_UPDT_DT_TM = UPDT_DT_TM,\n\t\tSRC_CLINSIG_UPDT_DT_TM,\n\t\tPERFORMED_DT_TM,\n\t\tEXPIRATION_DT_TM,\n\t\tEVENT_START_DT_TM,\n\t\tEVENT_END_DT_TM,\n\t\tCLINSIG_UPDT_DT_TM,\n\t\tUPDATE_PERSONNEL,\n\t\tVERIFIED_PERSONNEL,\n\t\tPERFORMING_PERSONNEL,\n\t\tDISPLAY_EVENT = DISPLAY,\n\t\tCODE_VALUE = SelectEventClassDesc@CODE_VALUE,\n\t\tDESCRIPTION = SelectEventClassDesc@DESCRIPTION,\n\t\tRESULT_UNIT_DISPLAY,\n\t\tRESULT_TIME_UNIT_DISPLAY,\n\t\tRESULT_STATUS_DISPLAY,\n\t\tCONTRIBUTOR_SYSTEM_DISPLAY,\n\t\tENTRY_MODE_DISPLAY = EVENT_ENTRY_MODE_DISPLAY,\n\t\tRESULT_SOURCE_DISPLAY,\n\t\tNORMALCY_DISPLAY,\n\t\tNORMALCY_METHOD_DISPLAY,\n\t\tEVENT_RELATIONSHIP_DISPLAY,\n\t\tRECORD_STATUS_DISPLAY,\n\t\tRESOURCE_GROUP_DISPLAY,\n\t\tRESOURCE_DISPLAY\n\t)) ~> MainSelect\neventClassFilter select(mapColumn(\n\t\tCODE_VALUE,\n\t\tCODE_SET,\n\t\tCDF_MEANING,\n\t\tDISPLAY,\n\t\tDISPLAY_KEY,\n\t\tDESCRIPTION,\n\t\tDEFINITION\n\t)) ~> SelectEventClass\nverifiedPrsnl select(mapColumn(\n\t\tVERIFIED_PERSON_ID = PERSON_ID,\n\t\tVERIFIED_PERSONNEL = NAME_FULL_FORMATTED\n\t)) ~> SelectVerifiedPrsnl\nupdatePrsnl select(mapColumn(\n\t\tUPDATE_PERSON_ID = PERSON_ID,\n\t\tUPDATE_PERSONNEL = NAME_FULL_FORMATTED\n\t)) ~> SelectUpdatePrsnl\nperformingPrsnl select(mapColumn(\n\t\tPERFORMING_PERSON_ID = PERSON_ID,\n\t\tPERFORMING_PERSONNEL = NAME_FULL_FORMATTED\n\t)) ~> SelectPerformingPrsnl\ncePrsnlPerformingPersonnel, SelectVerifiedPrsnl join(VERIFIED_PRSNL_ID == VERIFIED_PERSON_ID,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> cePrsnlVerifiedPersonnel\nresultUnit filter(CODE_SET == 54 && ACTIVE_IND) ~> resultUnitFilter\nresultUnitFilter select(mapColumn(\n\t\tRESULT_UNIT_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_UNIT_DISPLAY = DISPLAY\n\t)) ~> SelectResultUnit\nceEventClassDesc, SelectResultUnit join(RESULT_UNITS_CD == RESULT_UNIT_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultUnit\nresultTimeUnit filter(CODE_SET == 54 && ACTIVE_IND) ~> resultTimeUnitFilter\nresultTimeUnitFilter select(mapColumn(\n\t\tRESULT_TIME_UNIT_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_TIME_UNIT_DISPLAY = DISPLAY\n\t)) ~> SelectResultTimeUnit\nceResultUnit, SelectResultTimeUnit join(RESULT_TIME_UNITS_CD == RESULT_TIME_UNIT_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultTimeUnit\nresultStatus filter(CODE_SET == 8 && ACTIVE_IND) ~> resultStatusFilter\nresultStatusFilter select(mapColumn(\n\t\tRESULT_STATUS_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_STATUS_DISPLAY = DISPLAY\n\t)) ~> SelectResultStatus\nceResultTimeUnit, SelectResultStatus join(RESULT_STATUS_CD == RESULT_STATUS_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultStatus\ncontributorSystem filter(CODE_SET == 89 && ACTIVE_IND) ~> contributorSystemFilter\ncontributorSystemFilter select(mapColumn(\n\t\tCONTRIBUTOR_SYSTEM_CODE_VALUE = CODE_VALUE,\n\t\tCONTRIBUTOR_SYSTEM_DISPLAY = DISPLAY\n\t)) ~> SelectContributorSystem\nceResultStatus, SelectContributorSystem join(CONTRIBUTOR_SYSTEM_CD == CONTRIBUTOR_SYSTEM_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceContributorSystem\nentryMode filter(CODE_SET == 29520 && ACTIVE_IND) ~> entryModeFilter\nentryModeFilter select(mapColumn(\n\t\tEVENT_ENTRY_MODE_CODE_VALUE = CODE_VALUE,\n\t\tEVENT_ENTRY_MODE_DISPLAY = DISPLAY\n\t)) ~> SelectEntryMode\nceContributorSystem, SelectEntryMode join(ENTRY_MODE_CD == EVENT_ENTRY_MODE_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEntryMode\nresultSource filter(CODE_SET == 30200 && ACTIVE_IND) ~> resultSourceFilter\nresultSourceFilter select(mapColumn(\n\t\tRESULT_SOURCE_CODE_VALUE = CODE_VALUE,\n\t\tRESULT_SOURCE_DISPLAY = DISPLAY\n\t)) ~> SelectResultSource\nceEntryMode, SelectResultSource join(SOURCE_CD == RESULT_SOURCE_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResultSource\nnormalcy filter(CODE_SET == 52 && ACTIVE_IND) ~> normalcyFilter\nnormalcyFilter select(mapColumn(\n\t\tNORMALCY_CODE_VALUE = CODE_VALUE,\n\t\tNORMALCY_DISPLAY = DISPLAY\n\t)) ~> SelectNormalcy\nceResultSource, SelectNormalcy join(NORMALCY_CD == NORMALCY_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceNormalcy\nnormalcyMethod filter(CODE_SET == 50 && ACTIVE_IND) ~> normalcyMethodFilter\nnormalcyMethodFilter select(mapColumn(\n\t\tNORMALCY_METHOD_CODE_VALUE = CODE_VALUE,\n\t\tNORMALCY_METHOD_DISPLAY = DISPLAY\n\t)) ~> SelectNormalcyMethod\nceNormalcy, SelectNormalcyMethod join(NORMALCY_METHOD_CD == NORMALCY_METHOD_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceNormalcyMethod\neventRelationship filter(CODE_SET == 24 && ACTIVE_IND) ~> eventRelationshipFilter\neventRelationshipFilter select(mapColumn(\n\t\tEVENT_RELATIONSHIP_CODE_VALUE = CODE_VALUE,\n\t\tEVENT_RELATIONSHIP_DISPLAY = DISPLAY\n\t)) ~> SelectEventRelationship\nceNormalcyMethod, SelectEventRelationship join(EVENT_RELTN_CD == EVENT_RELATIONSHIP_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceEventRelationship\nrecordStatus filter(CODE_SET == 48 && ACTIVE_IND) ~> recordStatusFilter\nrecordStatusFilter select(mapColumn(\n\t\tRECORD_STATUS_CODE_VALUE = CODE_VALUE,\n\t\tRECORD_STATUS_DISPLAY = DISPLAY\n\t)) ~> SelectRecordStatus\nceEventRelationship, SelectRecordStatus join(RECORD_STATUS_CD == RECORD_STATUS_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceRecordStatus\nresourceGroup filter(CODE_SET == 221 && ACTIVE_IND) ~> resourceGroupFilter\nresourceGroupFilter select(mapColumn(\n\t\tRESOURCE_GROUP_CODE_VALUE = CODE_VALUE,\n\t\tRESOURCE_GROUP_DISPLAY = DISPLAY\n\t)) ~> SelectResourceGroup\nceRecordStatus, SelectResourceGroup join(RESOURCE_GROUP_CD == RESOURCE_GROUP_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResourceGroup\nresource filter(CODE_SET == 221 && ACTIVE_IND) ~> resourceFilter\nresourceFilter select(mapColumn(\n\t\tRESOURCE_CODE_VALUE = CODE_VALUE,\n\t\tRESOURCE_DISPLAY = DISPLAY\n\t)) ~> SelectResource\nceResourceGroup, SelectResource join(RESOURCE_CD == RESOURCE_CODE_VALUE,\n\tjoinType:'inner',\n\tbroadcast: 'none')~> ceResource\nMainSelect sink(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> VitalsSink"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/VitalsSinkTest')]",
+				"[concat(variables('factoryId'), '/datasets/StagedClinicalEventTest')]",
+				"[concat(variables('factoryId'), '/datasets/StagedPrsnlTest')]",
+				"[concat(variables('factoryId'), '/datasets/StagedCodeValueTest')]"
 			]
 		}
 	]

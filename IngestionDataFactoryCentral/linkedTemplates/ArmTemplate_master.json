@@ -7,6 +7,10 @@
 			"metadata": "Data Factory Name",
 			"defaultValue": "IngestionDataFactoryCentral"
 		},
+		"I2B2MetaDataLink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'I2B2MetaDataLink'"
+		},
 		"PocOdbcProd2_credential": {
 			"type": "secureString",
 			"metadata": "Secure string for 'credential' of 'PocOdbcProd2'"
@@ -22,6 +26,18 @@
 		"PilotBlobStorage_properties_typeProperties_connectionString_secretName": {
 			"type": "string",
 			"defaultValue": "pilotblobstorageconnectionstring"
+		},
+		"PilotI2b2DataDIDServer_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "piloti2b2datadidconstr"
+		},
+		"PilotI2b2DataServer_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "piloti2b2dataconstr"
+		},
+		"PilotI2b2MetadataServer_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "piloti2b2metadataconstr"
 		},
 		"PilotOracleSource_properties_typeProperties_connectionString_secretName": {
 			"type": "string",
@@ -70,6 +86,9 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"I2B2MetaDataLink_connectionString": {
+						"value": "[parameters('I2B2MetaDataLink_connectionString')]"
+					},
 					"PocOdbcProd2_credential": {
 						"value": "[parameters('PocOdbcProd2_credential')]"
 					},
@@ -84,6 +103,15 @@
 					},
 					"PilotBlobStorage_properties_typeProperties_connectionString_secretName": {
 						"value": "[parameters('PilotBlobStorage_properties_typeProperties_connectionString_secretName')]"
+					},
+					"PilotI2b2DataDIDServer_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('PilotI2b2DataDIDServer_properties_typeProperties_connectionString_secretName')]"
+					},
+					"PilotI2b2DataServer_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('PilotI2b2DataServer_properties_typeProperties_connectionString_secretName')]"
+					},
+					"PilotI2b2MetadataServer_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('PilotI2b2MetadataServer_properties_typeProperties_connectionString_secretName')]"
 					},
 					"PilotOracleSource_properties_typeProperties_connectionString_secretName": {
 						"value": "[parameters('PilotOracleSource_properties_typeProperties_connectionString_secretName')]"
@@ -119,6 +147,26 @@
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_1')]"
 			]
 		}
 	]

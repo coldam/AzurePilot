@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "IngestionDataFactoryCentral"
 		},
+		"I2B2MetaDataLink_connectionString": {
+			"value": ""
+		},
 		"PocOdbcProd2_credential": {
 			"value": ""
 		},
@@ -16,6 +19,15 @@
 		},
 		"PilotBlobStorage_properties_typeProperties_connectionString_secretName": {
 			"value": "pilotblobstorageconnectionstring"
+		},
+		"PilotI2b2DataDIDServer_properties_typeProperties_connectionString_secretName": {
+			"value": "piloti2b2datadidconstr"
+		},
+		"PilotI2b2DataServer_properties_typeProperties_connectionString_secretName": {
+			"value": "piloti2b2dataconstr"
+		},
+		"PilotI2b2MetadataServer_properties_typeProperties_connectionString_secretName": {
+			"value": "piloti2b2metadataconstr"
 		},
 		"PilotOracleSource_properties_typeProperties_connectionString_secretName": {
 			"value": "pilotoracleconstr"

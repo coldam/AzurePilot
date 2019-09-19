@@ -1,0 +1,265 @@
+{
+	"name": "I2B2DataBlobToSqlServer",
+	"properties": {
+		"activities": [
+			{
+				"name": "ListofSourceTables",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'I2B2Data'"
+					},
+					"dataset": {
+						"referenceName": "SourceTableList",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ParallelDataCopy",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "ListofSourceTables",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('ListofSourceTables').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "LogExecutionStart",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[logExecutionStart]",
+								"storedProcedureParameters": {
+									"pipelineRunID": {
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"pipelineRunStartTime": {
+										"value": {
+											"value": "@pipeline().TriggerTime",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"stageTableID": {
+										"value": {
+											"value": "@item().stageTableID",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "PilotAzureSqlDatabase",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Stage Data",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "LogExecutionStart",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobStorageReadSettings",
+										"recursive": true,
+										"wildcardFileName": "*.parquet",
+										"enablePartitionDiscovery": false
+									}
+								},
+								"sink": {
+									"type": "AzureSqlSink",
+									"tableOption": "autoCreate"
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "StagedData",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": {
+											"value": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "snkMetadata",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": {
+											"value": "\t\n@{item().schemaName}\".\"@{item().tableName}",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "SuccessSP",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Stage Data",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[logExecutionEnd]",
+								"storedProcedureParameters": {
+									"pipelineRunEndTime": {
+										"value": {
+											"value": "@{utcnow()}",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"pipelineRunID": {
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"pipelineRunStatus": {
+										"value": "Success",
+										"type": "String"
+									},
+									"stageTableID": {
+										"value": {
+											"value": "@{item().stageTableID}",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "PilotAzureSqlDatabase",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Failure SP",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Stage Data",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[logExecutionEnd]",
+								"storedProcedureParameters": {
+									"pipelineRunEndTime": {
+										"value": {
+											"value": "@{utcnow()}",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"pipelineRunID": {
+										"value": {
+											"value": "@pipeline().RunId",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"pipelineRunStatus": {
+										"value": "Failure",
+										"type": "String"
+									},
+									"stageTableID": {
+										"value": {
+											"value": "@{item().stageTableID}",
+											"type": "Expression"
+										},
+										"type": "Int32"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "PilotAzureSqlDatabase",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

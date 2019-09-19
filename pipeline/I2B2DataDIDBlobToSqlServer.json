@@ -1,5 +1,5 @@
 {
-	"name": "I2B2DataBlobToSqlServer",
+	"name": "I2B2DataDIDBlobToSqlServer",
 	"properties": {
 		"activities": [
 			{
@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'I2B2Data'"
+						"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'I2B2DataDID'"
 					},
 					"dataset": {
 						"referenceName": "SourceTableList",
@@ -135,7 +135,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "snkI2b2Data",
+									"referenceName": "snkI2b2DataDID",
 									"type": "DatasetReference",
 									"parameters": {
 										"TableName": {

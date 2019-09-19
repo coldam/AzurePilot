@@ -1,0 +1,24 @@
+{
+	"name": "snkI2b2Data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "I2B2DataLink",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TableName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "I2B2Data",
+			"table": {
+				"value": "@dataset().TableName",
+				"type": "Expression"
+			}
+		}
+	}
+}

@@ -140,7 +140,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"TableName": {
-											"value": "\t\n@{item().schemaName}\".\"@{item().tableName}",
+											"value": "\t\n@{item().tableName}",
 											"type": "Expression"
 										}
 									}

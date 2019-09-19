@@ -1,0 +1,1102 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "IngestionDataFactoryCentral"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/I2B2MetadataBlobToSqlServer')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ListofSourceTables",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'I2B2Metadata'"
+							},
+							"dataset": {
+								"referenceName": "SourceTableList",
+								"type": "DatasetReference"
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ParallelDataCopy",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "ListofSourceTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('ListofSourceTables').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "LogExecutionStart",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionStart]",
+										"storedProcedureParameters": {
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStartTime": {
+												"value": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@item().stageTableID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Stage Data",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "LogExecutionStart",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ParquetSource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"wildcardFileName": "*.parquet",
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "AzureSqlSink"
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "StagedData",
+											"type": "DatasetReference",
+											"parameters": {
+												"TableName": {
+													"value": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "snkMetadata",
+											"type": "DatasetReference",
+											"parameters": {
+												"TableName": {
+													"value": "@{item().tableName}",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "SuccessSP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Success",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Failure SP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Failure",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/StagedData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/I2B2Metadata_I2B2_VISIT_LOCATION')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "I2B2Metadata_I2B2_VISIT_LOCATION",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "C_Hlevel",
+						"type": "INT32"
+					},
+					{
+						"name": "C_Fullname",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Name",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Synonym_CD",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Visualattributes",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Totalnum",
+						"type": "INT32"
+					},
+					{
+						"name": "C_Basecode",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Metadataxml",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Facttablecolumn",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Tablename",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Columnname",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Columndatatype",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Operator",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Dimcode",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Comment",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Tooltip",
+						"type": "UTF8"
+					},
+					{
+						"name": "M_Applied_Path",
+						"type": "UTF8"
+					},
+					{
+						"name": "Update_Date",
+						"type": "INT96"
+					},
+					{
+						"name": "Download_Date",
+						"type": "INT96"
+					},
+					{
+						"name": "Import_Date",
+						"type": "INT96"
+					},
+					{
+						"name": "Sourcesystem_CD",
+						"type": "UTF8"
+					},
+					{
+						"name": "Valuetype_CD",
+						"type": "UTF8"
+					},
+					{
+						"name": "M_Exclusion_CD",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Path",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Symbol",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StagedI2B2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "CLINICAL_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENCNTR_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERSON_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_4",
+						"type": "INT96"
+					},
+					{
+						"name": "ENCNTR_FINANCIAL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_7",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_TITLE_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "VIEW_LEVEL",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ORDER_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CATALOG_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SERIES_REF_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "ACCESSION_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "CONTRIBUTOR_SYSTEM_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "REFERENCE_NBR",
+						"type": "UTF8"
+					},
+					{
+						"name": "PARENT_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_RELTN_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_18",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_CLASS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_TAG",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_22",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_END_DT_TM_OS",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_VAL",
+						"type": "UTF8"
+					},
+					{
+						"name": "RESULT_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_TIME_UNITS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RECORD_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESULT_STATUS_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "AUTHENTIC_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PUBLISH_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "QC_REVIEW_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMALCY_METHOD_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "INQUIRE_SECURITY_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_GROUP_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "RESOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SUBTABLE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "COLLATING_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_40",
+						"type": "INT96"
+					},
+					{
+						"name": "VERIFIED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_42",
+						"type": "INT96"
+					},
+					{
+						"name": "PERFORMED_PRSNL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_44",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_TASK",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_CNT",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UPDT_APPLCTX",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NORMAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "NORMAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_LOW",
+						"type": "UTF8"
+					},
+					{
+						"name": "CRITICAL_HIGH",
+						"type": "UTF8"
+					},
+					{
+						"name": "UTC_TMP2_53",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_TAG_SET_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOTE_IMPORTANCE_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_56",
+						"type": "INT96"
+					},
+					{
+						"name": "ORDER_ACTION_SEQUENCE",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "ENTRY_MODE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SOURCE_CD",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CLINICAL_SEQ",
+						"type": "UTF8"
+					},
+					{
+						"name": "EVENT_END_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "EVENT_START_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "PERFORMED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VERIFIED_TZ",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TASK_ASSAY_VERSION_NBR",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "MODIFIER_LONG_TEXT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "SRC_EVENT_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "UTC_TMP2_68",
+						"type": "INT96"
+					},
+					{
+						"name": "CE_DYNAMIC_LABEL_ID",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "NOMEN_STRING_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "LAST_UTC_TS",
+						"type": "INT96"
+					},
+					{
+						"name": "DEVICE_FREE_TXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "TRAIT_BIT_MAP",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TXN_ID_TEXT",
+						"type": "UTF8"
+					},
+					{
+						"name": "CLU_SUBKEY1_FLAG",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VALID_UNTIL_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "VERIFIED_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "VALID_FROM_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "SRC_CLINSIG_UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "PERFORMED_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EXPIRATION_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_START_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "EVENT_END_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "CLINSIG_UPDT_DT_TM",
+						"type": "INT96"
+					},
+					{
+						"name": "INST_ID",
+						"type": "DOUBLE"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/StagedData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": {
+							"value": "/@{dataset().TableName}",
+							"type": "Expression"
+						},
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/I2B2DataBlobtoSqlServer')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ListofSourceTables",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT * FROM dbo.[tablesToStage] WHERE sourceDB = 'I2B2Data'"
+							},
+							"dataset": {
+								"referenceName": "SourceTableList",
+								"type": "DatasetReference"
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ParallelDataCopy",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "ListofSourceTables",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('ListofSourceTables').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "LogExecutionStart",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionStart]",
+										"storedProcedureParameters": {
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStartTime": {
+												"value": {
+													"value": "@pipeline().TriggerTime",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@item().stageTableID",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Stage Data",
+									"type": "Copy",
+									"dependsOn": [
+										{
+											"activity": "LogExecutionStart",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "ParquetSource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"wildcardFileName": "*.parquet",
+												"enablePartitionDiscovery": false
+											}
+										},
+										"sink": {
+											"type": "AzureSqlSink"
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "StagedData",
+											"type": "DatasetReference",
+											"parameters": {
+												"TableName": {
+													"value": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "snkI2b2Data",
+											"type": "DatasetReference",
+											"parameters": {
+												"TableName": {
+													"value": "@{item().tableName}",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "SuccessSP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Success",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Failure SP",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Stage Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[logExecutionEnd]",
+										"storedProcedureParameters": {
+											"pipelineRunEndTime": {
+												"value": {
+													"value": "@{utcnow()}",
+													"type": "Expression"
+												},
+												"type": "DateTime"
+											},
+											"pipelineRunID": {
+												"value": {
+													"value": "@pipeline().RunId",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"pipelineRunStatus": {
+												"value": "Failure",
+												"type": "String"
+											},
+											"stageTableID": {
+												"value": {
+													"value": "@{item().stageTableID}",
+													"type": "Expression"
+												},
+												"type": "Int32"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "PilotAzureSqlDatabase",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/StagedData')]",
+				"[concat(variables('factoryId'), '/datasets/snkI2b2Data')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/snkI2b2Data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "I2B2DataLink",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "I2B2Data",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

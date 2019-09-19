@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'credential' of 'PocOdbcProd2'"
 		},
+		"I2B2DataLink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'I2B2DataLink'"
+		},
 		"PilotAzureKeyVault_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://PilotKeyVault.vault.azure.net/"
@@ -88,6 +92,9 @@
 					},
 					"I2B2MetaDataLink_connectionString": {
 						"value": "[parameters('I2B2MetaDataLink_connectionString')]"
+					},
+					"I2B2DataLink_connectionString": {
+						"value": "[parameters('I2B2DataLink_connectionString')]"
 					},
 					"PocOdbcProd2_credential": {
 						"value": "[parameters('PocOdbcProd2_credential')]"

@@ -11,6 +11,9 @@
 		"PocOdbcProd2_credential": {
 			"value": ""
 		},
+		"I2B2DataLink_connectionString": {
+			"value": ""
+		},
 		"PilotAzureKeyVault_properties_typeProperties_baseUrl": {
 			"value": "https://PilotKeyVault.vault.azure.net/"
 		},

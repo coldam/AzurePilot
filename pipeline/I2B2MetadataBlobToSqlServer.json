@@ -1,5 +1,5 @@
 {
-	"name": "I2B2BlobToSqlServer",
+	"name": "I2B2MetadataBlobToSqlServer",
 	"properties": {
 		"activities": [
 			{

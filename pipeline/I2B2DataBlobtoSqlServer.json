@@ -136,7 +136,13 @@
 							"outputs": [
 								{
 									"referenceName": "snkI2b2Data",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": {
+											"value": "@{item().tableName}",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						},

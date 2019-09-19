@@ -127,7 +127,10 @@
 									"referenceName": "StagedData",
 									"type": "DatasetReference",
 									"parameters": {
-										"TableName": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}"
+										"TableName": {
+											"value": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
+											"type": "Expression"
+										}
 									}
 								}
 							],

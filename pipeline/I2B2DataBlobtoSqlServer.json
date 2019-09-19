@@ -135,14 +135,8 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "snkMetadata",
-									"type": "DatasetReference",
-									"parameters": {
-										"TableName": {
-											"value": "@{item().tableName}",
-											"type": "Expression"
-										}
-									}
+									"referenceName": "snkI2b2Data",
+									"type": "DatasetReference"
 								}
 							]
 						},

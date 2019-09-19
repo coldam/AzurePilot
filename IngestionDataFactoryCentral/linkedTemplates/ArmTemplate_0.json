@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'I2B2DataLink'"
 		},
+		"I2B2DataDIDLink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'I2B2DataDIDLink'"
+		},
 		"PocOdbcProd2_credential": {
 			"type": "secureString",
 			"metadata": "Secure string for 'credential' of 'PocOdbcProd2'"
@@ -169,6 +173,19 @@
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
 					"connectionString": "[parameters('I2B2DataLink_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/I2B2DataDIDLink')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('I2B2DataDIDLink_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -449,6 +466,35 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/I2B2DataLink')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/snkI2b2DataDID')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "I2B2DataDIDLink",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "I2B2DataDID",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/I2B2DataDIDLink')]"
 			]
 		},
 		{
@@ -1189,153 +1235,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/I2B2Metadata_I2B2_VISIT_LOCATION')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "PilotBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": "I2B2Metadata_I2B2_VISIT_LOCATION",
-						"container": "staginglz"
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": [
-					{
-						"name": "C_Hlevel",
-						"type": "INT32"
-					},
-					{
-						"name": "C_Fullname",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Name",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Synonym_CD",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Visualattributes",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Totalnum",
-						"type": "INT32"
-					},
-					{
-						"name": "C_Basecode",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Metadataxml",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Facttablecolumn",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Tablename",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Columnname",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Columndatatype",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Operator",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Dimcode",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Comment",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Tooltip",
-						"type": "UTF8"
-					},
-					{
-						"name": "M_Applied_Path",
-						"type": "UTF8"
-					},
-					{
-						"name": "Update_Date",
-						"type": "INT96"
-					},
-					{
-						"name": "Download_Date",
-						"type": "INT96"
-					},
-					{
-						"name": "Import_Date",
-						"type": "INT96"
-					},
-					{
-						"name": "Sourcesystem_CD",
-						"type": "UTF8"
-					},
-					{
-						"name": "Valuetype_CD",
-						"type": "UTF8"
-					},
-					{
-						"name": "M_Exclusion_CD",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Path",
-						"type": "UTF8"
-					},
-					{
-						"name": "C_Symbol",
-						"type": "UTF8"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/PilotBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ParallelDataStagingOracle')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "PilotOracleSource",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "OracleTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "test",
-					"table": "test"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/PilotOracleSource')]"
 			]
 		}
 	]

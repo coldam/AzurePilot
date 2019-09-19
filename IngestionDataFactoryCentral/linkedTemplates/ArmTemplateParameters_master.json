@@ -14,6 +14,9 @@
 		"I2B2DataLink_connectionString": {
 			"value": ""
 		},
+		"I2B2DataDIDLink_connectionString": {
+			"value": ""
+		},
 		"PilotAzureKeyVault_properties_typeProperties_baseUrl": {
 			"value": "https://PilotKeyVault.vault.azure.net/"
 		},

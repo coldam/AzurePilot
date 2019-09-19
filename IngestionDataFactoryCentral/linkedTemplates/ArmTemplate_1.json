@@ -13,6 +13,149 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/I2B2Metadata_I2B2_VISIT_LOCATION')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "I2B2Metadata_I2B2_VISIT_LOCATION",
+						"container": "staginglz"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "C_Hlevel",
+						"type": "INT32"
+					},
+					{
+						"name": "C_Fullname",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Name",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Synonym_CD",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Visualattributes",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Totalnum",
+						"type": "INT32"
+					},
+					{
+						"name": "C_Basecode",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Metadataxml",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Facttablecolumn",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Tablename",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Columnname",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Columndatatype",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Operator",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Dimcode",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Comment",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Tooltip",
+						"type": "UTF8"
+					},
+					{
+						"name": "M_Applied_Path",
+						"type": "UTF8"
+					},
+					{
+						"name": "Update_Date",
+						"type": "INT96"
+					},
+					{
+						"name": "Download_Date",
+						"type": "INT96"
+					},
+					{
+						"name": "Import_Date",
+						"type": "INT96"
+					},
+					{
+						"name": "Sourcesystem_CD",
+						"type": "UTF8"
+					},
+					{
+						"name": "Valuetype_CD",
+						"type": "UTF8"
+					},
+					{
+						"name": "M_Exclusion_CD",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Path",
+						"type": "UTF8"
+					},
+					{
+						"name": "C_Symbol",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParallelDataStagingOracle')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "PilotOracleSource",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "OracleTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "test",
+					"table": "test"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PlaceholderI2b2DataDIDTable')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -2304,152 +2447,6 @@
 				"schema": []
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/CopyPipeline_Millennium')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy_clinicalevent",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [
-							{
-								"name": "Source",
-								"value": "V500.CLINICAL_EVENT"
-							},
-							{
-								"name": "Destination",
-								"value": "staginglz/V500_CLINICAL_EVENT/onemillionrecords"
-							}
-						],
-						"typeProperties": {
-							"source": {
-								"type": "OracleSource",
-								"partitionOption": "DynamicRange",
-								"partitionSettings": {
-									"partitionColumnName": "CLINICAL_EVENT_ID",
-									"partitionUpperBound": "4999999999",
-									"partitionLowerBound": "4900000000"
-								}
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings",
-									"maxConcurrentConnections": 16
-								}
-							},
-							"enableStaging": false,
-							"enableSkipIncompatibleRow": true,
-							"redirectIncompatibleRowSettings": {
-								"linkedServiceName": {
-									"referenceName": "PilotBlobStorage",
-									"type": "LinkedServiceReference"
-								},
-								"path": "staginglz/V500_CLINICAL_EVENT"
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "SourceDataset_clinicalevent",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DestinationDataset_clinicalevent",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_clinicalevent')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/CopyPipeline_ODBC')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy_charge_event",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [
-							{
-								"name": "Source",
-								"value": "\"V500\".\"CLINICAL_EVENT\""
-							},
-							{
-								"name": "Destination",
-								"value": "staginglz//"
-							}
-						],
-						"typeProperties": {
-							"source": {
-								"type": "OdbcSource"
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobStorageWriteSettings",
-									"maxConcurrentConnections": 16
-								}
-							},
-							"enableStaging": false,
-							"enableSkipIncompatibleRow": true,
-							"redirectIncompatibleRowSettings": {
-								"linkedServiceName": {
-									"referenceName": "PilotBlobStorage",
-									"type": "LinkedServiceReference"
-								},
-								"path": "staginglz/V500_CLINICAL_EVENT"
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "Source_ODBC_Charge_Event",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "Destination_parquet_charge_event",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Source_ODBC_Charge_Event')]"
-			]
 		}
 	]
 }

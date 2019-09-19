@@ -140,7 +140,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"TableName": {
-											"value": "\t\n@{replace(item().schemaName, ' ','')}.@{replace(item().tableName, ' ','')}",
+											"value": "\t\n@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
 											"type": "Expression"
 										}
 									}

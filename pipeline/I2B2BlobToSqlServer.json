@@ -124,13 +124,10 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "StagingData",
+									"referenceName": "StagedData",
 									"type": "DatasetReference",
 									"parameters": {
-										"TableName": {
-											"value": "\t\n@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}",
-											"type": "Expression"
-										}
+										"TableName": "@{replace(item().schemaName, ' ','')}_@{replace(item().tableName, ' ','')}"
 									}
 								}
 							],

@@ -1,0 +1,149 @@
+{
+	"name": "SourceDailySched",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "haldb_test",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "DT",
+				"type": "varchar"
+			},
+			{
+				"name": "TM",
+				"type": "varchar"
+			},
+			{
+				"name": "VIS_NUM",
+				"type": "varchar"
+			},
+			{
+				"name": "ID",
+				"type": "varchar"
+			},
+			{
+				"name": "STATUS",
+				"type": "varchar"
+			},
+			{
+				"name": "VIS_TYPE_NM",
+				"type": "varchar"
+			},
+			{
+				"name": "DT_WHEN_SCHEDULED",
+				"type": "varchar"
+			},
+			{
+				"name": "TM_WHEN_SCHEDULED",
+				"type": "varchar"
+			},
+			{
+				"name": "DT_WHEN_RESCHEDULED",
+				"type": "varchar"
+			},
+			{
+				"name": "TM_WHEN_RESCHEDULED",
+				"type": "varchar"
+			},
+			{
+				"name": "CAN_OR_BMP_DT",
+				"type": "varchar"
+			},
+			{
+				"name": "DT_WHEN_ARRIVED",
+				"type": "varchar"
+			},
+			{
+				"name": "TM_WHEN_ARRIVED",
+				"type": "varchar"
+			},
+			{
+				"name": "U_TVX_CALL_DT",
+				"type": "varchar"
+			},
+			{
+				"name": "U_TVX_MESS_TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "RES",
+				"type": "varchar"
+			},
+			{
+				"name": "INTERNAL_DUR",
+				"type": "varchar"
+			},
+			{
+				"name": "U_AGE_APPT_DT",
+				"type": "varchar"
+			},
+			{
+				"name": "REASON_FOR_VIS",
+				"type": "varchar"
+			},
+			{
+				"name": "RESCHEDULED_APPT_DT",
+				"type": "varchar"
+			},
+			{
+				"name": "RESCHEDULED_APPT_TM",
+				"type": "varchar"
+			},
+			{
+				"name": "RESCHED_FROM_DT",
+				"type": "varchar"
+			},
+			{
+				"name": "RESCHED_FROM_TIME",
+				"type": "varchar"
+			},
+			{
+				"name": "DUR_OF_APPT",
+				"type": "varchar"
+			},
+			{
+				"name": "CONFIDENTIAL_FLAG",
+				"type": "varchar"
+			},
+			{
+				"name": "CATEGORY__1",
+				"type": "varchar"
+			},
+			{
+				"name": "TM_TIM_3",
+				"type": "varchar"
+			},
+			{
+				"name": "COPAY",
+				"type": "varchar"
+			},
+			{
+				"name": "DEPT__3",
+				"type": "varchar"
+			},
+			{
+				"name": "U_ACTUAL_PROV_NUM__3",
+				"type": "varchar"
+			},
+			{
+				"name": "ID_331",
+				"type": "varchar"
+			},
+			{
+				"name": "ID_123",
+				"type": "varchar"
+			},
+			{
+				"name": "ID_301",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "UMC_Scheduling_Daily"
+		}
+	}
+}

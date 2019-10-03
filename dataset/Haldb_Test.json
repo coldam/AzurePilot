@@ -1,0 +1,12 @@
+{
+	"name": "Haldb_Test",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "haldb_test",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}

@@ -35,8 +35,11 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DestinationDataset_DailySched",
-						"type": "DatasetReference"
+						"referenceName": "StagedData",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "UMC_Scheduling_Daily"
+						}
 					}
 				]
 			}

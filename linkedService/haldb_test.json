@@ -1,0 +1,21 @@
+{
+	"name": "haldb_test",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "PilotAzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "pilothaldbtestconstr"
+			}
+		},
+		"connectVia": {
+			"referenceName": "pilotIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

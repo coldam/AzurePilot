@@ -4,6 +4,7 @@
 		"activities": [
 			{
 				"name": "CopyDailySched",
+				"description": "Copy daily scheduling data",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {

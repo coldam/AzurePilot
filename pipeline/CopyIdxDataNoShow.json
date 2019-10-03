@@ -58,13 +58,33 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from INFORMATION_SCHEMA.TABLES\nwhere TABLE_CATALOG = 'idxAnalyzer'"
+						"sqlReaderQuery": "select TABLE_NAME from INFORMATION_SCHEMA.TABLES\nwhere TABLE_CATALOG = 'idxAnalyzer'"
 					},
 					"dataset": {
 						"referenceName": "Haldb_Test",
 						"type": "DatasetReference"
 					},
 					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Filter1",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "Lookup_IdxAnalyzer_Tables",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup_IdxAnalyzer_Tables').output",
+						"type": "Expression"
+					},
+					"condition": ""
 				}
 			}
 		],

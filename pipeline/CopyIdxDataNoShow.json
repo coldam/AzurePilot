@@ -40,11 +40,11 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup_IdxAnalyzer_Tables').output",
+						"value": "@activity('Lookup_IdxAnalyzer_Tables').output.value",
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@or(equals(item(),'UMC_Scheduling_Daily'),equals(item(),'C_Patient'))",
+						"value": "@or(equals(item().TABLE_NAME,'UMC_Scheduling_Daily'),equals(item().TABLE_NAME,'C_Patient'))",
 						"type": "Expression"
 					}
 				}
@@ -63,7 +63,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Filter1').output",
+						"value": "@activity('Filter1').output.value",
 						"type": "Expression"
 					},
 					"activities": [
@@ -83,7 +83,7 @@
 								"source": {
 									"type": "SqlServerSource",
 									"sqlReaderQuery": {
-										"value": "select * from @activity('Filter1').output",
+										"value": "select * from @{item().TABLE_NAME}",
 										"type": "Expression"
 									}
 								},
@@ -107,7 +107,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"TableName": {
-											"value": "@activity('Filter1').output",
+											"value": "@{item().TABLE_NAME}",
 											"type": "Expression"
 										}
 									}

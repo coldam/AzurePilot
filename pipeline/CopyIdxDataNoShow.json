@@ -91,6 +91,45 @@
 									}
 								}
 							]
+						},
+						{
+							"name": "Delete_Old_Files",
+							"description": "Cleans up directory by removing all files in directory that weren't copied when the pipeline started",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Copy_Tables_To_Blob",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "StagedData",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": "idxAnalyzer/@{item().TABLE_NAME}"
+									}
+								},
+								"enableLogging": true,
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"modifiedDatetimeEnd": {
+										"value": "@{addaddminutes(pipeline().TriggerTime, -15)}",
+										"type": "Expression"
+									}
+								}
+							}
 						}
 					]
 				}

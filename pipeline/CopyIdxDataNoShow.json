@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select TABLE_NAME from INFORMATION_SCHEMA.TABLES\nwhere TABLE_CATALOG = 'idxAnalyzer'"
+						"sqlReaderQuery": "select TABLE_NAME from INFORMATION_SCHEMA.TABLES\nwhere TABLE_CATALOG = 'idxAnalyzer'\nand TABLE_NAME in ('UMC_Scheduling_Daily','C_Scheduling_Departments','C_Patient_Azure','C_Scheduling_Providers', 'C_Scheduling_Locations')"
 					},
 					"dataset": {
 						"referenceName": "Haldb_Test",
@@ -27,8 +27,8 @@
 				}
 			},
 			{
-				"name": "Filter_IDX",
-				"type": "Filter",
+				"name": "ForEach1",
+				"type": "ForEach",
 				"dependsOn": [
 					{
 						"activity": "Lookup_IdxAnalyzer_Tables",
@@ -43,32 +43,9 @@
 						"value": "@activity('Lookup_IdxAnalyzer_Tables').output.value",
 						"type": "Expression"
 					},
-					"condition": {
-						"value": "@or(equals(item().TABLE_NAME,'UMC_Scheduling_Daily'),equals(item().TABLE_NAME,'C_Patient_Azure'))",
-						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "ForEach1",
-				"type": "ForEach",
-				"dependsOn": [
-					{
-						"activity": "Filter_IDX",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"items": {
-						"value": "@activity('Filter_IDX').output.value",
-						"type": "Expression"
-					},
 					"activities": [
 						{
-							"name": "Copy data1",
+							"name": "Copy_Tables_To_Blob",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {

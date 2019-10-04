@@ -67,8 +67,7 @@
 								"sink": {
 									"type": "ParquetSink",
 									"storeSettings": {
-										"type": "AzureBlobStorageWriteSettings",
-										"copyBehavior": "MergeFiles"
+										"type": "AzureBlobStorageWriteSettings"
 									}
 								},
 								"enableStaging": false,

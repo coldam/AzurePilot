@@ -125,7 +125,7 @@
 									"type": "AzureBlobStorageReadSettings",
 									"recursive": true,
 									"modifiedDatetimeEnd": {
-										"value": "@{addaddminutes(pipeline().TriggerTime, -15)}",
+										"value": "@{addminutes(pipeline().TriggerTime, -15)}",
 										"type": "Expression"
 									}
 								}

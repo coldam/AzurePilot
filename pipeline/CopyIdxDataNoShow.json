@@ -3,47 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "CopyDailySched",
-				"description": "Copy daily scheduling data",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "SqlServerSource"
-					},
-					"sink": {
-						"type": "ParquetSink",
-						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
-						}
-					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "SourceDailySched",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "StagedData",
-						"type": "DatasetReference",
-						"parameters": {
-							"TableName": "UMC_Scheduling_Daily"
-						}
-					}
-				]
-			},
-			{
 				"name": "Lookup_IdxAnalyzer_Tables",
 				"type": "Lookup",
 				"dependsOn": [],
@@ -84,7 +43,78 @@
 						"value": "@activity('Lookup_IdxAnalyzer_Tables').output",
 						"type": "Expression"
 					},
-					"condition": ""
+					"condition": {
+						"value": "@or(equals(item(),'UMC_Scheduling_Daily'),equals(item(),'C_Patient'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Filter1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Filter1').output",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "select * from @activity('Filter1').output",
+										"type": "Expression"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "Haldb_Test",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "StagedData",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": {
+											"value": "@activity('Filter1').output",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
 				}
 			}
 		],

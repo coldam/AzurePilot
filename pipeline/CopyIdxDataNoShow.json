@@ -120,6 +120,13 @@
 										"TableName": "idxAnalyzer/@{item().TABLE_NAME}"
 									}
 								},
+								"logStorageSettings": {
+									"linkedServiceName": {
+										"referenceName": "PilotBlobStorage",
+										"type": "LinkedServiceReference"
+									},
+									"path": "logsdeletedfiles"
+								},
 								"enableLogging": true,
 								"storeSettings": {
 									"type": "AzureBlobStorageReadSettings",

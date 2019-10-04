@@ -94,7 +94,7 @@
 						},
 						{
 							"name": "Delete_Old_Files",
-							"description": "Cleans up directory by removing all files in directory that weren't copied when the pipeline started",
+							"description": "Cleans up directory by removing all files in directory that weren't copied when the pipeline started (15 mins)",
 							"type": "Delete",
 							"dependsOn": [
 								{

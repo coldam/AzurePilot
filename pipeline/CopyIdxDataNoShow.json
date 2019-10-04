@@ -117,6 +117,30 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Lookup_Col_Names",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "select * from INFORMATION_SCHEMA.COLUMNS\nwhere TABLE_CATALOG = 'idxAnalyzer'\nand TABLE_NAME like 'C_Patient'"
+					},
+					"dataset": {
+						"referenceName": "Haldb_Test",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
 			}
 		],
 		"annotations": []

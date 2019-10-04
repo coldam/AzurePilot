@@ -27,7 +27,7 @@
 				}
 			},
 			{
-				"name": "Filter1",
+				"name": "Filter_IDX",
 				"type": "Filter",
 				"dependsOn": [
 					{
@@ -54,7 +54,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Filter1",
+						"activity": "Filter_IDX",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -63,7 +63,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Filter1').output.value",
+						"value": "@activity('Filter_IDX').output.value",
 						"type": "Expression"
 					},
 					"activities": [

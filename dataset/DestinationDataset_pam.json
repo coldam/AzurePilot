@@ -19,7 +19,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "procedure_dates"
+			"table": "proc_test"
 		}
 	}
 }

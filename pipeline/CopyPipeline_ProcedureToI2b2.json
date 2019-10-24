@@ -29,12 +29,13 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
-							"maxConcurrentConnections": 16,
-							"wildcardFileName": "*.*"
+							"wildcardFileName": "*.*",
+							"enablePartitionDiscovery": false
 						}
 					},
 					"sink": {
-						"type": "SqlServerSink"
+						"type": "SqlServerSink",
+						"tableOption": "autoCreate"
 					},
 					"enableStaging": false,
 					"enableSkipIncompatibleRow": true,

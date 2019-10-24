@@ -13,7 +13,7 @@
 				"folderPath": "V500_PROCEDURE",
 				"container": "staginglz"
 			},
-			"compressionCodec": "snappy"
+			"compressionCodec": "none"
 		},
 		"schema": [
 			{

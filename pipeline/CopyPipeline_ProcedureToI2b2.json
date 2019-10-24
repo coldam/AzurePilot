@@ -1,0 +1,83 @@
+{
+	"name": "CopyPipeline_ProcedureToI2b2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_pam",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "staginglz/V500_PROCEDURE/"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.PROC_DT_TMs"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"maxConcurrentConnections": 16,
+							"wildcardFileName": "*.*"
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink"
+					},
+					"enableStaging": false,
+					"enableSkipIncompatibleRow": true,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "PROC_DT_TM",
+									"type": "INT96"
+								},
+								"sink": {
+									"name": "PROC_DT_TM",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ENCNTR_ID",
+									"type": "DOUBLE"
+								},
+								"sink": {
+									"name": "ENCNTR_ID",
+									"type": "Decimal"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_pam",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_pam",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}

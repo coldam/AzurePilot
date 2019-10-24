@@ -1,0 +1,29 @@
+{
+	"name": "DestinationDataset_pam",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotI2b2DataServer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "ENCNTR_ID",
+				"type": "numeric",
+				"precision": 18,
+				"scale": 0
+			},
+			{
+				"name": "PROC_DT_TM",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "PROC_DT_TMs"
+		}
+	}
+}

@@ -23,7 +23,7 @@
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "PROC_DT_TMs"
+			"table": "procdates"
 		}
 	}
 }

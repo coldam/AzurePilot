@@ -10,20 +10,16 @@
 		"schema": [
 			{
 				"name": "ENCNTR_ID",
-				"type": "numeric",
-				"precision": 18,
-				"scale": 0
+				"type": "varchar"
 			},
 			{
 				"name": "PROC_DT_TM",
-				"type": "datetime",
-				"precision": 23,
-				"scale": 3
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "procdates"
+			"table": "procedure_dates"
 		}
 	}
 }

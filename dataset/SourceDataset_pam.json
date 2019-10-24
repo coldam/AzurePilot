@@ -1,0 +1,29 @@
+{
+	"name": "SourceDataset_pam",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PilotBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "V500_PROCEDURE",
+				"container": "staginglz"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "PROC_DT_TM",
+				"type": "INT96"
+			},
+			{
+				"name": "ENCNTR_ID",
+				"type": "DOUBLE"
+			}
+		]
+	}
+}

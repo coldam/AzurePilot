@@ -45,21 +45,19 @@
 							{
 								"source": {
 									"name": "PROC_DT_TM",
-									"type": "INT96"
+									"type": "DateTime"
 								},
 								"sink": {
-									"name": "PROC_DT_TM",
-									"type": "DateTime"
+									"name": "PROC_DT_TM"
 								}
 							},
 							{
 								"source": {
 									"name": "ENCNTR_ID",
-									"type": "DOUBLE"
+									"type": "Double"
 								},
 								"sink": {
-									"name": "ENCNTR_ID",
-									"type": "Decimal"
+									"name": "ENCNTR_ID"
 								}
 							}
 						]

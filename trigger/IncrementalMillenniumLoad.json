@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Daily run of tables from dbo.tablesToStage where incrementalCopyFlag = 1",
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipelines": [
 			{
 				"pipelineReference": {
